@@ -1,11 +1,36 @@
-<script setup>
+<script setup lang="ts">
+
     import BlurText from '~/components/common/BlurText.vue';
     import Counter from '~/components/common/Counter.vue';
     import Headphones from '~/assets/media/headphones.png'
+    import type { Product } from '~~/types/Product';
+
+    interface ApiResponse<T> {
+        data: T;
+    }
+
+    const route = useRoute()
+    const uuid = route.params.uuid
+    const product = ref<Product | null>(null)
+
+    const quantity = ref<number>(1);
     
+    onMounted(async() => {
+        try {
+            const config = useRuntimeConfig();
+            const response = await $fetch<ApiResponse<Product>>(`${config.public.apiBaseUrl}/products/${uuid}`)
+            
+            product.value = response.data
+            
+            if(product?.value?.stock) {
+                quantity.value = product?.value?.stock
+            }
 
-    const quantity = ref(1);
-
+        } catch (error) {
+            console.error(error)
+        }
+    })
+    
     const decrementQuantity = () => {
         if (quantity.value > 1) {
             quantity.value--;
@@ -13,7 +38,9 @@
     }
 
     const incrementQuantity = () => {
-        if (quantity.value < 5) {
+        const maxStock = Number(product.value?.stock) || 1;
+
+        if (quantity.value < maxStock) {
             quantity.value++;
         }
     }
@@ -37,10 +64,12 @@
             </button>
         </div>
     </section>
-    <section class="mt-7 px-4">
+    <section 
+        v-if="product"
+        class="mt-7 px-4">
         <div class="flex justify-center items-center">
             <BlurText
-                text="Sony WHXM-4000"
+                :text="product?.name"
                 :delay="200"
                 class-name="dark:text-white text-3xl md:text-4xl font-semibold"
                 animate-by="words"
@@ -99,8 +128,8 @@
     <section class="mt-10 px-4">
         <div class="mt-7 border-b border-gray-200 dark:border-slate-700 flex justify-between">
             <div>
-                <h2 class="text-xl text-gray-600 dark:text-gray-300"> Sony WHXM-4000 </h2>
-                <span class="text-red-500 font-extrabold text-2xl"> $6,000.00 </span>
+                <h2 class="text-xl text-gray-600 dark:text-gray-300"> {{ product?.name }} </h2>
+                <span class="text-red-500 font-extrabold text-2xl"> ${{ product?.price }} </span>
             </div>
             <div class="flex justify-between items-center gap-x-4">
                 <button 
@@ -127,7 +156,7 @@
         <div class="mt-4 border-b border-gray-200 dark:border-slate-700">
             <h4 class="text-lg font-light dark:text-white"> Description </h4>
             <p class="my-2 text-sm font-extralight dark:text-white">
-                There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
+                {{ product?.description }}
             </p>
         </div>
     </section>

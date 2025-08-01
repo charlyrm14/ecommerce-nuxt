@@ -4,7 +4,7 @@
 
 <template>
     <NuxtLink
-        to="/products/mi-producto" 
+        to="/products/13bd3802-2d17-4015-a242-4e8b7be60321" 
         class="relative bg-red-100 border border-red-200 rounded-lg">
         <div class="relative">
             <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
