@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/image'],
+  modules: ['@nuxt/image', '@pinia/nuxt'],
   css: ['@/app/assets/css/main.css'],
   vite: {
     plugins: [
@@ -20,4 +20,13 @@ export default defineNuxtConfig({
       }
     }
   },
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.API_BASE_URL || 'http://127.0.0.1:8000/api/v1',
+    },
+  },
+  alias: {
+    '~/types': '/types',
+    '@types': '/types'
+  }
 })
