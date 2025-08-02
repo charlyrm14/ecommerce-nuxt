@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <footer class="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[60%] md:w-[30%] bg-black dark:bg-slate-700 py-1 px-2 shadow-lg flex justify-between items-center z-50 rounded-4xl">
+    <footer class="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[60%] md:w-[30%] bg-black dark:bg-dark-light py-1 px-2 shadow-lg flex justify-between items-center z-50 rounded-4xl">
         <NuxtLink 
             to="/"
             class="flex flex-col items-center py-2 px-4 text-white rounded-4xl cursor-pointer hover:opacity-75"

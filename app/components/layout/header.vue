@@ -1,5 +1,5 @@
 <template>
-    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-100 dark:bg-slate-900">
+    <header class="fixed top-0 left-0 right-0 z-50">
         <div class="max-w-8xl mx-auto w-full px-6 mt-6">
             <div class="flex justify-between items-center mb-3">
                 <div class="flex items-center gap-x-2">
@@ -11,7 +11,7 @@
                     <p class="text-xs font-light text-gray-500 dark:text-gray-300"> Welcome <span class="block font-bold text-base text-black dark:text-white"> Carlos I. </span> </p>
                 </div>
                 <div class="flex justify-end">
-                    <button class="bg-white p-2 rounded-full border border-gray-200 cursor-pointer hover:opacity-75">
+                    <button class="bg-white dark:bg-dark-soft p-2 rounded-full border border-gray-200 dark:border-none dark:text-white cursor-pointer hover:opacity-75">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -34,33 +34,6 @@
                     </svg>
                 </div>
             </div>
-        </div>
-        <div class="flex gap-x-2 overflow-x-auto px-6 my-4">
-            <button class="bg-black dark:bg-slate-600 text-white px-4 py-1.5 rounded-4xl border border-gray-200 dark:border-slate-600 cursor-pointer flex justify-between items-center gap-x-2 font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-                </svg> Todo
-            </button>
-            <button class="bg-white text-black px-4 py-1.5 rounded-4xl border border-gray-200 cursor-pointer flex justify-between items-center gap-x-2 font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" />
-                </svg> Electrónica
-            </button>
-            <button class="bg-white text-black px-4 py-1.5 rounded-4xl border border-gray-200 cursor-pointer flex justify-between items-center gap-x-2 font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" />
-                </svg> Hogar
-            </button>
-            <button class="bg-white text-black px-4 py-1.5 rounded-4xl border border-gray-200 cursor-pointer flex justify-between items-center gap-x-2 font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" />
-                </svg> Mujer
-            </button>
-            <button class="bg-white text-black px-4 py-1.5 rounded-4xl border border-gray-200 cursor-pointer flex justify-between items-center gap-x-2 font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125Z" />
-                </svg> Hombre
-            </button>
         </div>
     </header>
 </template>
