@@ -1,5 +1,10 @@
 <script setup>
     import Headphones from '~/assets/media/headphones.png'
+    import Counter from '../common/Counter.vue';
+    import { useCounter } from '~/composables/useCounter';
+    
+    const { count, increment, decrement } = useCounter(1, 9)
+
 </script>
 
 <template>
@@ -37,9 +42,21 @@
                     </button>
                     <div class="bg-gray-100 dark:bg-dark-light p-1.5 md:p-1 rounded-4xl">
                         <div class="flex justify-between items-center gap-x-2 md:gap-x-4">
-                            <button class="bg-gray-300 dark:bg-dark-soft text-gray-600 dark:text-white rounded-full px-2.5 py-0.5 md:px-4 md:py-2 cursor-pointer hover:opacity-75"> - </button>
-                            <p class="text-xl md:text-2xl text-red-500 font-bold"> 3 </p>
-                            <button class="bg-gray-300 dark:bg-dark-soft text-gray-600 dark:text-white rounded-full px-2.5 py-0.5 md:px-4 md:py-2 cursor-pointer hover:opacity-75"> + </button>
+                            <button 
+                                @click.prevent="decrement"
+                                class="bg-gray-300 dark:bg-dark-soft text-gray-600 dark:text-white rounded-full px-2.5 py-0.5 md:px-4 md:py-2 cursor-pointer hover:opacity-75"> - </button>
+                            <Counter
+                                :value="count"
+                                :places="[1]"
+                                :fontSize="30"
+                                :padding="0"
+                                :gap="12"
+                                textColor="red"
+                                :fontWeight="900"
+                                :gradientHeight="0"/>
+                            <button
+                                @click.prevent="increment"
+                                class="bg-gray-300 dark:bg-dark-soft text-gray-600 dark:text-white rounded-full px-2.5 py-0.5 md:px-4 md:py-2 cursor-pointer hover:opacity-75"> + </button>
                         </div>
                     </div>
                 </div>
