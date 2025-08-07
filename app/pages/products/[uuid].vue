@@ -4,6 +4,7 @@
     import Counter from '~/components/common/Counter.vue';
     import Headphones from '~/assets/media/headphones.png'
     import type { Product } from '~~/types/Product';
+    import { useCounter } from '~/composables/useCounter';
 
     interface ApiResponse<T> {
         data: T;
@@ -12,8 +13,8 @@
     const route = useRoute()
     const uuid = route.params.uuid
     const product = ref<Product | null>(null)
+    const stock = ref<number>(10)
 
-    const quantity = ref<number>(1);
     const tabs = ref<number>(1);
     
     onMounted(async() => {
@@ -22,26 +23,18 @@
             const response = await $fetch<ApiResponse<Product>>(`${config.public.apiBaseUrl}/products/${uuid}`)
             
             product.value = response.data
+
+            if (product?.value?.stock) {
+                stock.value = product.value.stock
+            }
             
         } catch (error) {
             console.error(error)
         }
     })
+
+    const { count, increment, decrement } = useCounter(1, stock)
     
-    const decrementQuantity = () => {
-        if (quantity.value > 1) {
-            quantity.value--;
-        }
-    }
-
-    const incrementQuantity = () => {
-        const maxStock = Number(product.value?.stock) || 1;
-
-        if (quantity.value < maxStock) {
-            quantity.value++;
-        }
-    }
-
 </script>
 
 <template>
@@ -131,10 +124,10 @@
             <div class="flex items-center">
                 <div class="flex justify-between items-center gap-x-2 bg-white dark:bg-dark-light rounded-4xl p-1.5">
                     <button
-                        @click="decrementQuantity()"
+                        @click="decrement"
                         class="bg-gray-200 dark:bg-dark-soft dark:text-white rounded-full px-3 py-1 md:px-4 md:py-1.5 cursor-pointer hover:opacity-75 mtext-base md:text-xl"> - </button>
                     <Counter
-                        :value="quantity"
+                        :value="count"
                         :places="[1]"
                         :fontSize="30"
                         :padding="0"
@@ -143,7 +136,7 @@
                         :fontWeight="900"
                         :gradientHeight="0"/>
                     <button 
-                        @click="incrementQuantity()"
+                        @click="increment"
                         class="bg-gray-200 dark:bg-dark-soft dark:text-white rounded-full px-3 py-1 md:px-4 md:py-1.5 cursor-pointer hover:opacity-75 mtext-base md:text-xl"> + </button>
                 </div>
             </div>
