@@ -16,7 +16,7 @@
 
 <template>
     <section class="px-3 mt-40">
-        <div class="dark:bg-dark-light p-4 rounded-lg">
+        <div class="bg-white dark:bg-dark-light border border-gray-200 dark:border-none p-4 rounded-lg shadow">
             <div class="w-[60%] md:w-full">
                 <h2 class="dark:text-white text-xl font-bold"> {{ title }} </h2>
                 <p class="dark:text-white text-xs md:text-sm font-extralight my-3"> {{ subtitle }} </p>
