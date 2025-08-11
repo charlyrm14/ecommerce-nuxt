@@ -5,34 +5,24 @@
     import Headphones from '~/assets/media/headphones.png'
     import type { Product } from '~~/types/Product';
     import { useCounter } from '~/composables/useCounter';
-
-    interface ApiResponse<T> {
-        data: T;
-    }
+    import type { ApiResponse } from '~~/types/ApiResponse';
 
     const route = useRoute()
     const uuid = route.params.uuid
-    const product = ref<Product | null>(null)
-    const stock = ref<number>(10)
+    
+    const { data, error } = await useAsyncData<ApiResponse<Product>>(`product-${uuid}`, () =>
+        $fetch<ApiResponse<Product>>(`/api/products/${uuid}`)
+    )
+
+    if (error.value) {
+        throw error.value
+    }
+
+    const product = ref<Product | null>(data?.value?.data ?? null)
+    const stock = ref<number>(product.value?.stock ?? 10)
 
     const tabs = ref<number>(1);
-    
-    onMounted(async() => {
-        try {
-            const config = useRuntimeConfig();
-            const response = await $fetch<ApiResponse<Product>>(`${config.public.apiBaseUrl}/products/${uuid}`)
             
-            product.value = response.data
-
-            if (product?.value?.stock) {
-                stock.value = product.value.stock
-            }
-            
-        } catch (error) {
-            console.error(error)
-        }
-    })
-
     const { count, increment, decrement } = useCounter(1, stock)
     
 </script>
@@ -58,15 +48,17 @@
         v-if="product"
         class="mt-7 px-4">
         <div class="flex justify-center items-center">
-            <BlurText
-                :text="product?.name"
-                :delay="200"
-                class-name="dark:text-white text-3xl md:text-4xl font-semibold"
-                animate-by="words"
-                direction="top"
-                :threshold="0.1"
-                root-margin="0px"
-                :step-duration="0.35"/>
+            <client-only>
+                <BlurText
+                    :text="product?.name"
+                    :delay="200"
+                    class-name="dark:text-white text-3xl md:text-4xl font-semibold"
+                    animate-by="words"
+                    direction="top"
+                    :threshold="0.1"
+                    root-margin="0px"
+                    :step-duration="0.35"/>
+            </client-only>
         </div>
     </section>
     <section class="px-4">
