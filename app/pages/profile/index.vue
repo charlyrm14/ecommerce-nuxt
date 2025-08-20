@@ -11,8 +11,10 @@
         <ChangeTheme/>
         <Notifications/>
     </section>
-    <section class="mt-7 px-4">
-        <div class="border-b border-gray-300 dark:border-dark-extralight">
+    <section class="mt-7 px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-dark-soft hover:rounded-lg">
+        <NuxtLink
+            to="/payments-methods" 
+            class="border-b border-gray-300 dark:border-dark-extralight">
             <div class="flex justify-between items-center">
                 <div class="flex justify-start items-center gap-x-4 mb-3">
                     <div class="dark:text-white">
@@ -41,6 +43,6 @@
                         </svg>
                 </button>
             </div>
-        </div>
+        </NuxtLink>
     </section>
 </template>
