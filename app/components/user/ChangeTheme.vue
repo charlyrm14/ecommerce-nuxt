@@ -1,5 +1,35 @@
 <script setup lang="ts">
+
     const showThemeContent = ref<boolean>(false)
+    const theme = ref<'light' | 'dark'>('light');
+
+    const toggleTheme = (color: 'light' | 'dark') => {
+
+        theme.value = color
+        localStorage.setItem('theme', color)
+        applyTheme();
+    }
+
+    const applyTheme = () => {
+        const root = document.documentElement
+
+        if (theme.value === 'dark') {
+            root.classList.add('dark')
+        } else {
+            root.classList.remove('dark')
+        }
+    }
+
+    onMounted(() => {
+        const savedTheme = localStorage.getItem('theme')
+        if (savedTheme) {
+            theme.value = savedTheme as 'light' | 'dark'
+        } else {
+            theme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        applyTheme()
+    })
+
 </script>
 
 <template>
@@ -36,25 +66,31 @@
         <div 
             v-if="showThemeContent"
             class="flex justify-start items-center mt-6 mb-3 gap-x-6">
-                <div class="bg-white border border-gray-200 p-4 rounded-lg flex justify-start gap-x-3 cursor-pointer hover:opacity-75 shadow-lg">
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="font-light"> Tema claro </p>
-                    </div>
+                <div 
+                    @click="toggleTheme('light')"
+                    class="bg-white p-4 rounded-lg flex justify-start gap-x-3 cursor-pointer hover:opacity-75 shadow-lg"
+                    :class="theme === 'light' ? 'border-2 border-blue-500' : 'border border-gray-200'">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-light"> Tema claro </p>
+                        </div>
                 </div>
-                <div class="bg-dark dark:bg-dark-extralight border-2 border-blue-500 p-4 rounded-lg flex justify-start gap-x-3 cursor-pointer hover:opacity-75 shadow-lg">
-                    <div class="text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="font-light text-white"> Tema obscuro </p>
-                    </div>
+                <div
+                    @click="toggleTheme('dark')"
+                    class="bg-dark dark:bg-dark-extralight p-4 rounded-lg flex justify-start gap-x-3 cursor-pointer hover:opacity-75 shadow-lg"
+                    :class="theme === 'dark' ? 'border-2 border-blue-500' : ''">
+                        <div class="text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-light text-white"> Tema obscuro </p>
+                        </div>
                 </div>
         </div>
     </div>
