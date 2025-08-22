@@ -29,7 +29,7 @@
                 </svg>
         </NuxtLink>
         <NuxtLink 
-            to="profile"
+            to="/"
             class="flex flex-col items-center py-2 px-4 text-white rounded-4xl cursor-pointer hover:opacity-75"
             :class="route.path === '/profile' ? 'bg-red-500 ' : ''">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 md:size-8">

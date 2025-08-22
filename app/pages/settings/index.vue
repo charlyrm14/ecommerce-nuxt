@@ -6,7 +6,7 @@
 </script>
 
 <template>
-    <SectionHeader title="Mi Perfil"/>
+    <SectionHeader title="Ajustes"/>
     <section class="mt-14 px-4">
         <ChangeTheme/>
         <Notifications/>
