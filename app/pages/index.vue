@@ -1,5 +1,5 @@
 <script setup>
-    import Header from '~/components/layout/header.vue';
+    import Header from '~/components/layout/user/header.vue';
     import CategoryTeaser from '~/components/user/CategoryTeaser.vue';
     import ProductItem from '~/components/user/ProductItem.vue';   
     
