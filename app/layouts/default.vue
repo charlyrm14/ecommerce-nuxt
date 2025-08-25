@@ -1,5 +1,5 @@
 <script setup>
-    import Footer from '~/components/layout/footer.vue';
+    import Footer from '~/components/layout/user/footer.vue';
 
     const route = useRoute()
 
