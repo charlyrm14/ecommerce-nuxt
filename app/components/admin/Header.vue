@@ -3,16 +3,17 @@
 </script>
 
 <template>
-    <header class="sticky top-0 z-30 flex items-center justify-between border-b border-purple-100 bg-white px-4 py-3">
+    <header class="sticky top-0 z-30 flex items-center justify-between border-b border-purple-100 bg-white px-4 py-3 gap-x-3">
         <div class="flex flex-1 max-w-md items-center">
-            <input type="text" placeholder="Buscar..." class="w-full rounded-md border border-gray-200  px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            <button class="rounded-md bg-blue-600 p-2 text-white hover:bg-blue-700">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z"/>
-                </svg>
-            </button>
+            <NuxtLink 
+                to="/"
+                class="bg-blue-100 rounded-full px-4 py-1 flex justify-between items-center gap-x-2 text-blue-500 font-bold cursor-pointer hover:opacity-75">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 md:size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+                    </svg>
+                    <p class="hidden md:block"> Tienda </p>
+            </NuxtLink>
+            
         </div>
 
         <div class="ml-4 flex items-center gap-4">
