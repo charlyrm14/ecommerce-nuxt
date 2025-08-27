@@ -12,7 +12,7 @@ export const useCategoriesStore = defineStore('categories', () => {
         try {
 
             const response = await $fetch<ApiResponse<Pagination<Category>>>(
-                `${config.public.apiBaseUrl}/categories`
+                `${config.public.apiBaseUrl}/categories?page=${page}`
             );
 
             categories.value = response.data;

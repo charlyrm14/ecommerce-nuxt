@@ -1,5 +1,11 @@
 <script setup lang="ts">
 
+    import type { Category } from '~~/types/Product';
+
+    defineProps<{
+        category: Category | null
+    }>()
+
     const emit = defineEmits(['closeDeleteCategory'])
 
     const isSubmitting = ref<boolean>(false);
@@ -45,14 +51,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                         </svg>
                     </div>
-                    <p class="text-sm text-slate-400 dark:text-slate-400 font-light">
+                    <p class="text-xs text-slate-400 dark:text-slate-400 font-light">
                         Los productos relacionados a esta categoría dejarán de estar asociados a esta categoría.
                     </p>
                 </div>
 
                 <p class="text-lg font-light text-red-500 text-center my-3">
                     ¿Estás seguro de querer eliminar la categoría
-                    <span class="font-bold">Electrónica</span>?
+                    <span class="font-bold"> {{ category?.name ?? 'Unknown' }} </span>?
                 </p>
             </div>
 
