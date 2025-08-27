@@ -1,4 +1,6 @@
 <script setup lang="ts">
+
+    import Alert from '~/components/admin/Alert.vue';
     import Breadcrumb from '~/components/admin/Breadcrumb.vue';
     import AddCategory from '~/components/admin/categories/AddCategory.vue';
     import DeleteCategory from '~/components/admin/categories/DeleteCategory.vue';
@@ -31,9 +33,14 @@
 </script>
 
 <template>
+
     <Breadcrumb
         main="Categorías"
         secondary="Lista"/>
+
+    <Alert
+        title="Éxito"
+        description="Categoría creada con éxito"/>
 
     <section class="mt-7">
         <div class="border border-gray-200 rounded-xl bg-white">
