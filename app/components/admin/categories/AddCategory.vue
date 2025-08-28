@@ -1,15 +1,44 @@
 <script setup lang="ts">
+    import { useCategoriesStore } from '~~/stores/categories';
+
+    type CategoryForm = {
+        name: string
+    }
 
     const emit = defineEmits(['closeCreateCategory'])
 
     const isSubmitting = ref<boolean>(false);
+    const statusCategory = ref<number>(1)
 
-    const handleSubmit = () => {
+    const categoriesStore = useCategoriesStore()
+
+    const handleSubmit = async( data: CategoryForm ) => {
         isSubmitting.value = true
 
-        setTimeout(() => {
+        const formData = {
+            ...data,
+            status: statusCategory.value
+        }
+
+        try {
+
+            await categoriesStore.createCategory(formData)
+
+            emit('closeCreateCategory')
+
+        } catch (error) {
+
+            console.error(error)
+            
+        } finally {
+            
             isSubmitting.value = false
-        }, 3000);
+            statusCategory.value = 1
+        }
+    }
+
+    const toggleStatusCategory = () => {
+        statusCategory.value = statusCategory.value === 1 ? 0 : 1
     }
 
 </script>
@@ -24,6 +53,7 @@
                     </svg>  Nueva categoría
                 </h2>
                 <button
+                    :disabled="isSubmitting"
                     @click="$emit('closeCreateCategory')"
                     class="text-slate-400 hover:text-red-500 transition cursor-pointer">
                         <svg 
@@ -38,44 +68,65 @@
                 </button>
             </div>
 
-            <div class="my-6">
-                <div class="mb-3">
-                    <label for="name" class="font-light uppercase"> Nombre <span class="text-red-500 font-bold"> * </span> </label>
-                    <div>
-                        <input 
+            <FormKit
+                type="form"
+                id="createCategory"
+                :actions="false"
+                incomplete-message="* Revisa los campos marcados con error *"
+                message-class="text-red-500 my-5 text-xs font-light"
+                @submit="handleSubmit">
+
+                <div class="my-6">
+                    <div class="mb-3">
+                        <label for="name" class="font-light uppercase"> Nombre <span class="text-red-500 font-bold"> * </span> </label>
+                        <FormKit 
                             type="text"
                             id="name"
                             name="name"
-                            class="w-full bg-gray-50 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
-                            placeholder="Ej: Electrónica, deportes, cocina">
+                            input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
+                            message-class="text-red-500 text-sm m-1.5 font-light"
+                            placeholder="Ej: Electrónica, deportes, cocina"
+                            validation="required|length:3,100"
+                            :validation-messages="{
+                                required: 'Ingresa un nombre',
+                                length: 'El nombre debe contener menos de 100 caracteres'
+                            }"
+                            :disabled="isSubmitting"/>
+                    </div>
+                    <div class="flex justify-between items-center gap-x-3">
+                        <p class="uppercase my-3 font-light"> 
+                            Estatus <span class="block text-sm text-gray-400 normal-case"> Define la visibildad de la categoría </span>
+                        </p>
+                        <button 
+                            type="button" 
+                            @click="toggleStatusCategory"
+                            class="relative inline-flex h-8 w-13 items-center rounded-full transition-colors duration-300 ease-in-out focus:outline-none peer cursor-pointer border"
+                            :class="statusCategory  === 1 ? 'bg-blue-500 border-blue-500' : 'bg-gray-200 border-gray-300'">
+                                <span 
+                                    class="inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 ease-in-out peer-checked:translate-x-6"
+                                    :class="statusCategory  === 1 ? 'translate-x-6' : 'translate-x-1'"></span>
+                        </button>
                     </div>
                 </div>
-                <div class="flex justify-between items-center gap-x-3">
-                    <p class="uppercase my-3 font-light"> 
-                        Estatus <span class="block text-sm text-gray-400 normal-case"> Define la visibildad de la categoría </span>
-                    </p>
-                    <button 
-                        type="button" 
-                        class="relative inline-flex h-8 w-13 items-center rounded-full bg-blue-500 transition-colors duration-300 ease-in-out focus:outline-none peer cursor-pointer">
-                            <span class="inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 ease-in-out translate-x-1 peer-checked:translate-x-6"></span>
-                    </button>
-                </div>
-            </div>
 
-            <div class="mt-6">
-                <div class="flex justify-between">
-                    <button 
-                        @click="$emit('closeCreateCategory')"
-                        class="bg-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
-                    <button
-                        @click="handleSubmit()"
-                        :disabled="isSubmitting"
-                        class="px-4 py-2 rounded-lg hover:opacity-75 transition"
-                        :class="!isSubmitting ? 'bg-blue-500 text-white cursor-pointer ' : 'bg-blue-300 text-white cursor-not-allowed'">
-                            {{ !isSubmitting ? 'Crear' : 'Creando...' }}
-                    </button>
+                <div class="mt-6">
+                    <div class="flex justify-between">
+                        <button 
+                            :disabled="isSubmitting"
+                            @click="$emit('closeCreateCategory')"
+                            class="bg-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
+                        <button
+                            type="submit"
+                            :disabled="isSubmitting"
+                            class="px-4 py-2 rounded-lg hover:opacity-75 transition"
+                            :class="!isSubmitting ? 'bg-blue-500 text-white cursor-pointer ' : 'bg-blue-300 text-white cursor-not-allowed'">
+                                {{ !isSubmitting ? 'Crear categoría' : 'Creando...' }}
+                        </button>
+                    </div>
                 </div>
-            </div>
+
+            </FormKit>
+
         </div>
     </div>
 </template>

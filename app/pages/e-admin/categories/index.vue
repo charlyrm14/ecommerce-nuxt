@@ -57,8 +57,10 @@
         secondary="Lista"/>
 
     <Alert
-        title="Éxito"
-        description="Categoría creada con éxito"/>
+        v-if="categoriesStore.alert.status"
+        :title="categoriesStore.alert.title"
+        :description="categoriesStore.alert.description"
+        :type="categoriesStore.alert.type"/>
 
     <section class="mt-7">
         <div class="border border-gray-200 rounded-xl bg-white">
