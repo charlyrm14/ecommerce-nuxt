@@ -1,21 +1,41 @@
 <script setup lang="ts">
 
+    import { useCategoriesStore } from '~~/stores/categories';
     import type { Category } from '~~/types/Product';
 
-    defineProps<{
+    const props = defineProps<{
         category: Category | null
     }>()
+
+    const categoriesStore = useCategoriesStore()
 
     const emit = defineEmits(['closeDeleteCategory'])
 
     const isSubmitting = ref<boolean>(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+
+        if(!props.category?.id) return
+
         isSubmitting.value = true
 
-        setTimeout(() => {
+        try {
+
+            await categoriesStore.deleteCategory({
+                id: props.category.id, 
+                name: props.category.name
+            })
+
+            emit('closeDeleteCategory')
+
+        } catch (error) {
+
+            console.error(error)
+
+        } finally {
+
             isSubmitting.value = false
-        }, 3000);
+        }
     }
 
 </script>
@@ -30,6 +50,7 @@
                     </svg>  Eliminar categoría
                 </h2>
                 <button
+                    :disabled="isSubmitting"
                     @click="$emit('closeDeleteCategory')"
                     class="text-slate-400 hover:text-red-500 transition cursor-pointer">
                         <svg 
@@ -65,6 +86,7 @@
             <div class="mt-6">
                 <div class="flex justify-between">
                     <button 
+                        :disabled="isSubmitting"
                         @click="$emit('closeDeleteCategory')"
                         class="bg-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
                     <button

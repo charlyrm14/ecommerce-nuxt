@@ -10,6 +10,11 @@ export const useCategoriesStore = defineStore('categories', () => {
         name: string
         status: number
     }
+
+    type DeleteCategory = {
+        id: number
+        name: string
+    }
     
     const config = useRuntimeConfig();
     const { alert, handleAlert } = useAlert()
@@ -43,7 +48,27 @@ export const useCategoriesStore = defineStore('categories', () => {
             handleAlert('Éxito', 'Categoría creada con éxito', 'success')
             
         } catch(error) {
-            console.log(error)
+            console.error(error)
+        }
+    }
+
+    const deleteCategory = async(data: DeleteCategory) => {
+        try {
+
+            const { id, name } = data
+
+            await $fetch(`${config.public.apiBaseUrl}/categories/${id}`, {
+                method: 'DELETE'
+            })
+            
+            if(categories.value) {
+                categories.value.data = categories.value.data.filter(c => c.id !== id)
+            }
+
+            handleAlert('Éxito', `Categoría ${name} eliminada con éxito`, 'success')
+
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -51,7 +76,8 @@ export const useCategoriesStore = defineStore('categories', () => {
         categories,
         alert,
         fetchGetCategories,
-        createCategory
+        createCategory,
+        deleteCategory
     }
 })
     
