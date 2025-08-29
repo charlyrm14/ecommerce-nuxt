@@ -1,11 +1,28 @@
 <script setup lang="ts">
     import Breadcrumb from '~/components/admin/Breadcrumb.vue';
-
+    import AddCategory from '~/components/admin/categories/AddCategory.vue';
+    import AddProductFiles from '~/components/admin/products/AddProductFiles.vue';
+    import UploadFiles from '~/components/admin/FileUploader.vue';
+    
     definePageMeta({
         layout: 'admin'
     })
 
     const isSubmitting = ref<boolean>(false)
+    const showCreateCategoryModal = ref<boolean>(false)
+    const showUploadFilesModal = ref<boolean>(false)
+
+    const openCreateCategoryModal = () => {
+        showCreateCategoryModal.value = true;
+    }
+    
+    const closeCreateCategoryModal = () => {
+        showCreateCategoryModal.value = false;
+    }
+
+    const closeUploadFileModal = () => {
+        showUploadFilesModal.value = false
+    }
 
     const handleSubmit = () => {
         isSubmitting.value = true
@@ -25,13 +42,16 @@
     <section class="mt-7">
         <div class="flex flex-col gap-6 md:flex-row">
             <aside class="md:basis-[20%]">
+
                 <div class="rounded-lg border border-gray-200 bg-white p-4">
                     <div class="py-2 px-4">
                         <h2 class="font-bold text-lg"> Portada </h2>
                     </div>
-                    <div class="flex justify-center hover:opacity-75 cursor-pointer relative">
-                        <div class="shadow-xl border border-gray-200 hover:border-blue-500 p-10 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 text-gray-400">
+                    <div
+                        @click="showUploadFilesModal = !showUploadFilesModal"
+                        class="flex justify-center hover:opacity-75 cursor-pointer relative">
+                        <div class="shadow-xl border border-gray-200 p-6 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-16 text-gray-400 rotate-15">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                             </svg>
                         </div>
@@ -45,6 +65,7 @@
                         <p class="text-xs text-gray-400"> Agrega una imagen para este producto en formato *.png, *.jpg and *.jpeg </p>
                     </div>
                 </div>
+                
                 <div class="mt-7 rounded-lg border border-gray-200 bg-white p-4">
                     <div class="flex justify-between items-center gap-x-3">
                         <div class="py-2 px-4">
@@ -80,6 +101,7 @@
                     </div>
                     <div class="px-4 mt-4">
                         <button
+                            @click="openCreateCategoryModal"
                             class="bg-blue-100 text-blue-500 text-sm px-4 py-2 flex justify-center items-center gap-x-2 w-full rounded-lg hover:opacity-75 cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
@@ -195,5 +217,13 @@
             </main>
         </div>
     </section>
+
+    <AddProductFiles
+        v-if="showUploadFilesModal"
+        @closeFileModal="closeUploadFileModal"/>
+
+    <AddCategory
+        v-if="showCreateCategoryModal"
+        @closeCreateCategory="closeCreateCategoryModal()"/>
 
 </template>
