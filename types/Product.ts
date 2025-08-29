@@ -26,7 +26,7 @@ export interface Product {
     price: string;
     stock: number;
     sku: string;
-    status: boolean;
+    status: number;
     category_id: number;
     brand_id: number|null;
     uuid: string;
