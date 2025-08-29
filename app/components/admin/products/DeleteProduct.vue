@@ -49,17 +49,17 @@
                         Los productos seguirán apareciendo en los carritos de los usuarios.
                     </p>
                 </div>
-                <p class="text-lg font-light text-red-500 text-center my-3">
+                <p class="text-base font-light text-red-500 text-center my-3">
                     ¿Estás seguro de querer eliminar el producto
                     <span class="font-bold"> TV 4k </span>?
                 </p>
             </div>
 
             <div class="mt-6">
-                <div class="flex justify-between">
+                <div class="flex justify-end gap-x-4">
                     <button 
                         @click="$emit('closeDeleteProduct')"
-                        class="bg-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
+                        class="bg-white border border-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
                     <button
                         @click="handleSubmit()"
                         :disabled="isSubmitting"
