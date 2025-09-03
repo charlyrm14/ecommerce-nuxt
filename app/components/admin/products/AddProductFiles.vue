@@ -1,7 +1,21 @@
 <script setup lang="ts">
     import FileUploader from '../FileUploader.vue';
+    import { useFilesStore } from '~~/stores/files';
 
     const emit = defineEmits(['closeFileModal'])
+
+    const filesStore = useFilesStore();
+
+    const closeModal = () => {
+        emit('closeFileModal')
+        filesStore.selectFiles = false
+        filesStore.files = []
+    }
+
+    const handleUseFiles = () => {
+        filesStore.selectFiles = true
+        emit('closeFileModal')
+    }
 
 </script>
 
@@ -31,18 +45,26 @@
             </div>
 
             <div class="my-6">
-                <FileUploader/>
+                <FileUploader
+                    accept="image/*"
+                    type="image"
+                    :multiple="false"
+                    :maxFiles="1"
+                    :maxSizeMB="5"
+                    :concurrency="1"/>
             </div>
 
-            <div class="mt-6">
+            <div class="mt-10">
                 <div class="flex justify-end items-center gap-x-4">
                     <button
-                        @click="emit('closeFileModal')"
-                        class="bg-white border border-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer">
+                        @click="closeModal"
+                        class="bg-white  text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer">
                             Cerrar
                     </button>
                     <button
-                        class="bg-blue-500 text-white px-4 py-2 hover:opacity-75 cursor-pointer rounded-lg shadow">
+                        @click="handleUseFiles"
+                        class=" px-4 py-2 rounded-lg"
+                        :class="filesStore.files.length > 0 ? 'bg-blue-500 text-white hover:opacity-75 cursor-pointer shadow' : 'bg-blue-500/40 text-white cursor-not-allowed' ">
                             Guardar
                     </button>
                 </div>
