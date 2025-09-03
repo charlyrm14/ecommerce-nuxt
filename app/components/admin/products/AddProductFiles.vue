@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import FileUploader from '../FileUploader.vue';
+    import FileUploader from '~/components/common/FileUploader.vue';
     import { useFilesStore } from '~~/stores/files';
 
     const emit = defineEmits(['closeFileModal'])

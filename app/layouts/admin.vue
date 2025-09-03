@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import Footer from '~/components/admin/Footer.vue';
-    import Header from '~/components/admin/Header.vue';
-    import Sidebar from '~/components/admin/Sidebar.vue';    
+    import Footer from '~/components/admin/layouts/Footer.vue';
+    import Header from '~/components/admin/layouts/Header.vue';
+    import Sidebar from '~/components/admin/layouts/Sidebar.vue';    
         
 </script>
 

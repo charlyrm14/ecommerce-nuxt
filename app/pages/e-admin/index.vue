@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import Breadcrumb from '~/components/admin/Breadcrumb.vue';
+    import Breadcrumb from '~/components/admin/layouts/Breadcrumb.vue';
     
     definePageMeta({
         layout: 'admin'

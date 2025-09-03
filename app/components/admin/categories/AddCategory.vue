@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useCategoriesStore } from '~~/stores/categories';
-    import FileUploader from '../FileUploader.vue';
+    import FileUploader from '~/components/common/FileUploader.vue';
 
     type CategoryForm = {
         name: string
@@ -128,8 +128,8 @@
                     <div class="flex justify-end gap-x-4">
                         <button 
                             :disabled="isSubmitting"
-                            @click="$emit('closeCreateCategory')"
-                            class="bg-white border border-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
+                            @click.prevent="$emit('closeCreateCategory')"
+                            class="bg-white text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer"> Cerrar </button>
                         <button
                             type="submit"
                             :disabled="isSubmitting"

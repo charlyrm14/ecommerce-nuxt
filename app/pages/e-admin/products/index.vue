@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import Breadcrumb from '~/components/admin/Breadcrumb.vue';
+    import Breadcrumb from '~/components/admin/layouts/Breadcrumb.vue';
     import DeleteProduct from '~/components/admin/products/DeleteProduct.vue';
     import PaginationProduct from '~/components/admin/products/PaginationProduct.vue';
     import Table from '~/components/admin/products/Table.vue';

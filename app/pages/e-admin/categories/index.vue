@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-    import Alert from '~/components/admin/Alert.vue';
-    import Breadcrumb from '~/components/admin/Breadcrumb.vue';
+    import Alert from '~/components/common/Alert.vue';
+    import Breadcrumb from '~/components/admin/layouts/Breadcrumb.vue';
     import AddCategory from '~/components/admin/categories/AddCategory.vue';
     import DeleteCategory from '~/components/admin/categories/DeleteCategory.vue';
     import PaginationCategory from '~/components/admin/categories/PaginationCategory.vue';
