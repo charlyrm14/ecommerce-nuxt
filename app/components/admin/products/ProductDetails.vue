@@ -1,9 +1,19 @@
 <script setup lang="ts">
 
     import { useCategoriesStore } from '~~/stores/categories';
+    
+    type Error = {
+        text: string
+        status: boolean
+    }
+
+    const props = defineProps<{
+        error?: Error
+    }>()
 
     const emit = defineEmits<{
-        (e: 'openCategoryModal'): void
+        (e: 'openCategoryModal'): void,
+        (e: 'categorySelected', id: number): void
     }>()
 
     const categoriesStore = useCategoriesStore();
@@ -16,6 +26,11 @@
         }
     })
 
+    const handleCategoryChange = (event: Event) => {
+        const id = Number((event.target as HTMLSelectElement).value)
+        emit('categorySelected', id)
+    }
+
 </script>
 
 <template>
@@ -27,16 +42,22 @@
             <div>
                 <label for="category_id" class="text-sm text-blue-500"> Categorías </label>
                 <select 
+                    @change="handleCategoryChange"
                     name="category_id" 
                     id="category_id"
                     class="w-full border border-gray-200 p-2 rounded-lg mt-2 text-gray-600 mb-0.5 focus:outline-none">
-                        <option value=""> Selecciona una categoría </option>
+                        <option value="0"> Selecciona una categoría </option>
                         <option
                             v-if="categoriesStore.categories?.data"
                             v-for="category in categoriesStore.categories?.data"
                             :key="category.id"
                             :value="category.id"> {{ category?.name }} </option>
                 </select>
+                <span 
+                    v-if="error?.status"
+                    class="my-1 text-red-500 text-sm block">
+                        {{ error?.text }}
+                </span>
                 <span class="text-xs text-gray-400">
                     Relaciona un producto a una categoría
                 </span>

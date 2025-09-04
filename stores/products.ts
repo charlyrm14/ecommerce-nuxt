@@ -5,9 +5,21 @@ import type { ApiResponse } from "~~/types/ApiResponse";
 
 export const useProductsStore = defineStore('products', () => {
 
+    type NewProduct = {
+        name: string
+        description: string
+        price: number
+        stock: number
+        status: number
+        category_id: number
+        brand_id: number
+        images: Array<number>
+    }
+
     const config = useRuntimeConfig();
 
     const products = ref<Pagination<Product> | null>(null);
+    const { alert, handleAlert } = useAlert()
 
     const fetchGetProducts = async(page = 1) => {
         try {
@@ -23,8 +35,33 @@ export const useProductsStore = defineStore('products', () => {
         }
     }
 
+    const createProduct = async(data: NewProduct) => {
+        try {
+
+            const response = await $fetch<ApiResponse<Product>>(`${config.public.apiBaseUrl}/products`, {
+                method: 'POST',
+                body: data
+            })
+
+            console.log(response)
+
+            products.value?.data.push(response.data)
+
+            await navigateTo('/e-admin/products')
+
+            handleAlert('Éxito', 'Producto creado con éxito', 'success')
+            
+        } catch (error) {
+
+            console.error(error)
+            handleAlert('Error', 'Error al crear producto', 'error')
+        }
+    }
+
     return {
         products, 
-        fetchGetProducts
+        alert,
+        fetchGetProducts,
+        createProduct
     }
 })
