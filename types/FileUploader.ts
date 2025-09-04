@@ -8,26 +8,33 @@ export type FileItem<T = unknown> = {
     response?: T
 }
 
-export type UploadImageResult = {
+export type UploadFileResult = Array<{
     data: {
-        sizes: {
+        id: number
+        type: string
+        mime_type: string
+        variants: {
             original: {
                 id: number
+                file_path: string,
+                size?: number,
+                width?: number,
+                height?: number,
+                resolution?: string,
                 original_name: string
-                file_name: string
-                file_path: string
-                mime_type: string
-            }
-            thumbnail: {
+            },
+            thumbnail?: {
                 id: number
-                original_name: string
-                file_name: string
                 file_path: string
-                mime_type: string
+                size?: number
+                width?: number
+                height?: number
+                resolution?: string
+                original_name: string
             }
         }
     }
-}
+}>
 
 export type FileUploaderOptions = {
     accept?: string
@@ -40,5 +47,5 @@ export type FileUploaderOptions = {
         file: File,
         onProgress?: (p: number) => void,
         signal?: AbortSignal
-    ) => Promise<UploadImageResult>
+    ) => Promise<UploadFileResult>
 }

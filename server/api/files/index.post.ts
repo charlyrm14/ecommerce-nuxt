@@ -5,15 +5,14 @@ export default defineEventHandler(async(event) => {
 
     try {
 
-        return await $fetch(`${config.public.apiBaseUrl}/files/images`, {
+        return await $fetch(`${config.public.apiBaseUrl}/files`, {
             method: 'POST',
             body
         })
         
     } catch (error) {
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Error to upload image'
-        })
+
+        console.error(error)
+
     }
 });
