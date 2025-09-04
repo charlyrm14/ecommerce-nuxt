@@ -86,21 +86,22 @@
                     class="border border-gray-200 px-3 pt-2 my-2 rounded-lg">
                         <div class="flex justify-between items-center">
                             <div class="flex justify-start gap-x-2">
+                                <p>{{ file?.response?.data?.variants?.thumbnail?.file_path }}</p>
                                 <div 
                                     class="bg-gray-200 rounded-lg p-1">
                                     <img
                                         v-if="props.type === 'image'"
-                                        :src="`${config.public.storageBase}/${file.response?.data.sizes.thumbnail.file_path}`" 
-                                        :alt="file.response?.data.sizes.thumbnail.original_name"
+                                        :src="`${config.public.storageBase}/${file?.response?.[0]?.data?.variants?.thumbnail?.file_path}`" 
+                                        :alt="file?.id"
                                         class="w-15 h-15 rounded-lg">
                                 </div>
                                 <p 
                                     v-if="props.type === 'image'"
                                     class="text-sm text-gray-700 truncate"> 
-                                        {{ file.response?.data.sizes.thumbnail.original_name }}
+                                        {{ file?.response?.[0]?.data?.variants?.thumbnail?.original_name }}
                                             <span class="block text-xs text-gray-400"> 
                                                 {{ (file.file.size / 1024 / 1024).toFixed(2) }} MB | 
-                                                    <span class="font-bold text-green-700"> {{ uploadProgress}} % </span> 
+                                                    <span class="font-bold text-green-700"> {{ uploadProgress }} % </span> 
                                             </span>
                                 </p>
                             </div>

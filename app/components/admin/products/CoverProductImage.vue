@@ -51,8 +51,8 @@
                     :key="file.id"
                     class="shadow-xl border border-gray-200 p-1 rounded-lg">
                         <img 
-                            :src="`${config.public.storageBase}/${file.response?.data.sizes.thumbnail.file_path}`" 
-                            :alt="file.response?.data.sizes.thumbnail.original_name" 
+                            :src="`${config.public.storageBase}/${file?.response?.[0]?.data?.variants?.thumbnail?.file_path}`" 
+                            :alt="file?.id" 
                             class="h-30 w-30 object-cover"/>
                 </div>
             </div>

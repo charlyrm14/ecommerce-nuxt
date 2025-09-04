@@ -2,7 +2,7 @@ import { useFilesStore } from "~~/stores/files"
 import type { 
     FileItem, 
     FileUploaderOptions, 
-    UploadImageResult 
+    UploadFileResult 
 } from "~~/types/FileUploader"
 
 export function useFileUploader (options: FileUploaderOptions) {
@@ -61,22 +61,18 @@ export function useFileUploader (options: FileUploaderOptions) {
         })
 
         filesStore.files.push(
-            ...validFiles.map<FileItem<UploadImageResult>>(file => ({
+            ...validFiles.map<FileItem<UploadFileResult>>(file => ({
                 id: crypto.randomUUID(),
                 file,
                 progress: uploadProgress.value,
                 status: uploadStatus.value
             }))
         )
-
-        if (opts.type === 'image') {
-            uploadImages(validFiles)
-        } else {
-            uploadFiles(validFiles)
-        }
+        
+        uploadFiles(validFiles)
     }
 
-    const uploadImages = async(filesToUpload: File[]) => {
+    const uploadFiles = async(filesToUpload: File[]) => {
 
         for (const file of filesToUpload) {
             
@@ -84,11 +80,11 @@ export function useFileUploader (options: FileUploaderOptions) {
             if (!item) continue
 
             try {
-
+                
                 const formData = new FormData()
                 formData.append('file', file)
 
-                const response = await $fetch<UploadImageResult>(`${config.public.apiBaseUrl}/files/images`, {
+                const response = await $fetch<UploadFileResult>(`${config.public.apiBaseUrl}/files`, {
                     method: 'POST',
                     body: formData,
                     onRequestProgress: (event) => {
@@ -98,7 +94,7 @@ export function useFileUploader (options: FileUploaderOptions) {
                         }
                     }
                 } as any)
-
+                
                 item.response = response
                 uploadStatus.value = 'success'
                 uploadProgress.value = 100
@@ -108,15 +104,7 @@ export function useFileUploader (options: FileUploaderOptions) {
                 console.error(error)
                 uploadStatus.value = 'error'
                 uploadProgress.value = 0
-            } 
-        }
-    }
-
-    const uploadFiles = async(dataFiles: File[]) => {
-        try {
-            console.log(dataFiles)
-        } catch (error) {
-            console.error(error)
+            }
         }
     }
 
@@ -136,7 +124,6 @@ export function useFileUploader (options: FileUploaderOptions) {
         onDrop,
         openFileDialog,
         handleFiles,
-        uploadFiles,
         removeFile
     }
 }
