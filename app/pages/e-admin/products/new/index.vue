@@ -4,14 +4,42 @@
     import AddProductFiles from '~/components/admin/products/AddProductFiles.vue';
     import CoverProductImage from '~/components/admin/products/CoverProductImage.vue';
     import ProductDetails from '~/components/admin/products/ProductDetails.vue';
+    import { useProductsStore } from '~~/stores/products';
+    import Alert from '~/components/common/Alert.vue';
     
+        
     definePageMeta({
         layout: 'admin'
     })
 
+    type NewProduct = {
+        name: string
+        description: string
+        price: number
+        stock: number
+        status: number
+        category_id: number
+        brand_id: number
+        images: Array<number>
+    }
+
+    type Errors = {
+        text: string
+        status: boolean
+    }
+
     const isSubmitting = ref<boolean>(false)
     const showCreateCategoryModal = ref<boolean>(false)
     const showUploadFilesModal = ref<boolean>(false)
+    const statusProduct = ref<number>(0)
+    const categorySelected = ref<number>(0)
+
+    const errors = reactive<Errors>({
+        text: '',
+        status: false
+    })
+
+    const productsStore = useProductsStore()
 
     const openCreateCategoryModal = () => {
         showCreateCategoryModal.value = true;
@@ -29,12 +57,47 @@
         showUploadFilesModal.value = false
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async(data: NewProduct) => {
+
         isSubmitting.value = true
 
-        setTimeout(() => {
+        if (categorySelected.value === 0) {
+            errors.status = true
+            errors.text = 'Selecciona una categoría'
             isSubmitting.value = false
-        }, 3000);
+            return
+        }
+
+        errors.status = false
+        errors.text = ''
+
+        const formData = {
+            ...data,
+            status: statusProduct.value,
+            category_id: categorySelected.value,
+            images: []
+        }
+
+        try {
+
+            await productsStore.createProduct(formData)
+
+        } catch (error) {
+
+            console.error(error)
+
+        } finally {
+
+            isSubmitting.value = false
+        }
+    }
+
+    const toggleStatusProduct = () => {
+        statusProduct.value = statusProduct.value === 1 ? 0 : 1
+    }
+
+    const onCategorySelected = (id: number) => {
+        categorySelected.value = id
     }
 
 </script>
@@ -43,6 +106,12 @@
     <Breadcrumb
         main="Productos"
         secondary="Nuevo producto"/>
+
+    <Alert
+        v-if="productsStore.alert.status"
+        :title="productsStore.alert.title"
+        :description="productsStore.alert.description"
+        :type="productsStore.alert.type"/>
 
     <section class="mt-7">
         <div class="flex flex-col gap-6 md:flex-row">
@@ -60,14 +129,20 @@
                         </div>
                         <button 
                             type="button" 
-                            class="relative inline-flex h-8 w-16 items-center rounded-full bg-blue-500 transition-colors duration-300 ease-in-out focus:outline-none peer cursor-pointer">
-                                <span class="inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 ease-in-out translate-x-1 peer-checked:translate-x-6"></span>
+                            @click="toggleStatusProduct"
+                            class="relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 ease-in-out focus:outline-none peer cursor-pointer"
+                            :class="statusProduct  === 1 ? 'bg-blue-500 border-blue-500' : 'bg-gray-200 border-gray-300'">
+                                <span 
+                                    class="inline-block h-6 w-7 transform rounded-full bg-white transition-transform duration-300 ease-in-out peer-checked:translate-x-6"
+                                    :class="statusProduct  === 1 ? 'translate-x-8' : 'translate-x-1'"></span>
                         </button>
                     </div>
                 </div>
 
                 <ProductDetails
-                    @openCategoryModal="openCreateCategoryModal"/>
+                    @openCategoryModal="openCreateCategoryModal"
+                    @categorySelected="onCategorySelected"
+                    :error="errors"/>
 
             </aside>
 
@@ -90,68 +165,107 @@
                         @submit="handleSubmit">
 
                             <div class="py-2 px-4">
-                                <div>
+                                <div class="mb-3">
                                     <label for="name" class="text-base"> Nombre <span class="text-red-500"> * </span> </label>
                                     <FormKit 
                                         type="text"
                                         id="name"
                                         name="name"
-                                        input-class="w-full border border-gray-200 text-gray-600 p-2.5 rounded-lg my-2 focus:outline-none"
+                                        input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                                         message-class="text-red-500 text-sm m-1.5 font-light"
                                         placeholder="Ej: Televisión, playera, cocina"
-                                        validation="required"/>
+                                        validation="required|length:3,100"
+                                        :validation-messages="{
+                                            required: 'Ingresa un nombre',
+                                            length: 'El nombre debe contener entre 3 y 100 caracteres'
+                                        }"
+                                        :disabled="isSubmitting"/>
+                                    <span class="text-xs text-gray-400 mt-1 block">
+                                        Establece el nombre del producto
+                                    </span>
                                 </div>
                             </div>
 
                             <div class="py-2 px-4">
-                                <div>
+                                <div class="mb-3">
                                     <label for="description" class="text-base"> Descripción <span class="text-red-500"> * </span> </label>
                                     <div class="border border-gray-200 mt-2 rounded-lg h-50">
                                         <div class="flex justify-start items-center gap-x-3 border-b border-gray-200 px-4 py-2">
-                                            <p class="text-gray-400 cursor-pointer hover:opacity-75 text-sm"> Normal </p>
-                                            <p class="text-gray-400 cursor-pointer hover:opacity-75 text-sm"> B </p>
-                                            <p class="text-gray-400 italic cursor-pointer hover:opacity-75 text-sm"> I </p>
-                                            <p class="text-gray-400 underline cursor-pointer hover:opacity-75 text-sm"> U </p>
+                                            <button 
+                                                class="text-gray-400 cursor-pointer hover:opacity-75 text-sm"> 
+                                                    Normal 
+                                            </button>
+                                            <button 
+                                                class="text-gray-400 font-bold cursor-pointer hover:opacity-75 text-sm"> 
+                                                    B 
+                                            </button>
+                                            <button 
+                                                class="text-gray-400 italic cursor-pointer hover:opacity-75 text-sm"> 
+                                                I 
+                                            </button>
+                                            <button 
+                                                class="text-gray-400 underline cursor-pointer hover:opacity-75 text-sm"> 
+                                                U 
+                                            </button>
                                         </div>
-                                        <div class="p-4 cursor-text">
-                                            <p class="text-xs text-gray-400"> Escribe aquí ... </p>
+                                        <div class="p-0.5 cursor-text">
+                                            <FormKit
+                                                type="textarea"
+                                                name="description" 
+                                                id="description"
+                                                placeholder="Escribe aquí..."
+                                                input-class="w-full bg-gray-50 text-gray-600 focus:outline-none h-39 p-1.5"
+                                                message-class="text-red-500 text-sm my-1.5 font-light"
+                                                validation="required|length:4,500"
+                                                :validation-messages="{
+                                                    required: 'Ingresa una descripción',
+                                                    length: 'La descripción debe tener entre 4 y 500 caracteres'
+                                                }"
+                                                :disabled="isSubmitting"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="py-2 px-4">
-                                <div>
-                                    <label for="price" class="text-base"> Precio <span class="text-red-500"> * </span> </label>
+                                <div class="mb-3">
+                                    <label for="price" class="text-base"> 
+                                        Precio <span class="text-red-500"> * </span> 
+                                    </label>
                                     <FormKit 
                                         type="number"
-                                        id="price"
                                         name="price"
-                                        input-class="w-full border border-gray-200 text-gray-600 p-2.5 rounded-lg my-2 focus:outline-none"
+                                        id="price"
+                                        input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                                         message-class="text-red-500 text-sm m-1.5 font-light"
                                         placeholder="Ej: 1299.99"
-                                        step="0.01"
-                                        validation="required"/>
-                                    <span class="text-xs text-gray-400">
+                                        validation="required"
+                                        :validation-messages="{
+                                            required: 'Ingresa un precio'
+                                        }"
+                                        :disabled="isSubmitting"/>
+                                    <span class="text-xs text-gray-400 mt-1 block">
                                         Establece el precio del producto con decimales
                                     </span>
                                 </div>
                             </div>
 
                             <div class="py-2 px-4">
-                                <div>
+                                <div class="my-3">
                                     <label for="stock" class="text-base"> Stock <span class="text-red-500"> * </span> </label>
                                     <FormKit 
                                         type="number"
                                         id="stock"
                                         name="stock"
-                                        input-class="w-full border border-gray-200 text-gray-600 p-2.5 rounded-lg my-2 focus:outline-none"
+                                        input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                                         message-class="text-red-500 text-sm m-1.5 font-light"
                                         placeholder="Ej: 5"
-                                        min="0"
-                                        max="15"
-                                        validation="required"/>
-                                    <span class="text-xs text-gray-400">
+                                        validation="required|min:1"
+                                        :validation-messages="{
+                                            required: 'Ingresa el stock',
+                                            min: 'El stock debe tener al menos 1 producto en stock'
+                                        }"/>
+                                    <span class="text-xs text-gray-400 mt-1 block">
                                         Establece el stock disponible del producto
                                     </span>
                                 </div>
@@ -161,7 +275,7 @@
                                 <div class="flex justify-between items-center">
                                     <NuxtLink
                                         to="/e-admin/products"
-                                        class="bg-gray-200 text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer">
+                                        class="text-gray-400 px-4 py-2 rounded-lg hover:opacity-75 cursor-pointer">
                                             Cancelar
                                     </NuxtLink>
                                     <button
