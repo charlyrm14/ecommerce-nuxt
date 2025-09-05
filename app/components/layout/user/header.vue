@@ -1,6 +1,6 @@
 <template>
     <header class="fixed top-0 left-0 right-0 z-50">
-        <div class="max-w-8xl mx-auto w-full px-6 mt-6">
+        <div class="max-w-8xl mx-auto w-full px-4 mt-6">
             <div class="flex justify-between items-center mb-3">
                 <div class="flex items-center gap-x-2">
                     <button class="bg-red-500 text-white p-2 rounded-full cursor-pointer hover:opacity-75">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="mt-6 flex flex-row gap-x-2">
-                <div class="relative basis-[90%]">
+                <div class="relative basis-[90%] md:basis-[95%]">
                     <input
                         type="text"
                         placeholder="Search..."
@@ -34,9 +34,9 @@
                         </svg>
                     </div>
                 </div>
-                <div class="basis-[10%]">
+                <div class="basis-[10%] md:basis-[5%]">
                     <button class="bg-red-100 text-red-500 p-3 w-full rounded-lg hover:opacity-75 cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 m-auto">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                         </svg>
                     </button>
