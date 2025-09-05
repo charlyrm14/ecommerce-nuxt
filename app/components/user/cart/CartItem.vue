@@ -1,6 +1,6 @@
 <script setup>
     import Headphones from '~/assets/media/headphones.png'
-    import Counter from '../common/Counter.vue';
+    import Counter from '~/components/common/Counter.vue';
     import { useCounter } from '~/composables/useCounter';
     
     const { count, increment, decrement } = useCounter(1, 9)

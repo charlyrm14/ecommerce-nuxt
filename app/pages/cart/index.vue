@@ -1,6 +1,6 @@
 <script setup>
-    import CartItem from '~/components/user/CartItem.vue'
-    import SectionHeader from '~/components/user/SectionHeader.vue';
+    import CartItem from '~/components/user/cart/CartItem.vue'
+    import SectionHeader from '~/components/user/layouts/SectionHeader.vue';
 </script>
 
 <template>

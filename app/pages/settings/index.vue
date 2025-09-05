@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import Notifications from '~/components/user/Notifications.vue';
-    import SectionHeader from '~/components/user/SectionHeader.vue';
-    import ChangeTheme from '~/components/user/ChangeTheme.vue';
+    import Notifications from '~/components/user/settings/Notifications.vue';
+    import SectionHeader from '~/components/user/layouts/SectionHeader.vue';
+    import ChangeTheme from '~/components/user/settings/ChangeTheme.vue';
     
 </script>
 
