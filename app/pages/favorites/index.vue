@@ -1,6 +1,6 @@
 <script setup>
-    import FavoriteItem from '~/components/user/FavoriteItem.vue';
-    import SectionHeader from '~/components/user/SectionHeader.vue';
+    import FavoriteItem from '~/components/user/favorites/FavoriteItem.vue';
+    import SectionHeader from '~/components/user/layouts/SectionHeader.vue';
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import CategoryItem from '~/components/user/CategoryItem.vue';
-    import SectionHeader from '~/components/user/SectionHeader.vue';
+    import CategoryItem from '~/components/user/categories/CategoryItem.vue';
+    import SectionHeader from '~/components/user/layouts/SectionHeader.vue';
     import { useCategoriesStore } from '~~/stores/categories'
 
     const categoriesStore = useCategoriesStore();
