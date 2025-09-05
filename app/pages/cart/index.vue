@@ -4,18 +4,36 @@
 </script>
 
 <template>
-    <SectionHeader title="Mi carrito"/>
+    <SectionHeader 
+        title="Mi carrito"/>
+
     <section class="mt-7 px-4">
         <CartItem/>
         <CartItem/>
     </section>
+
+    <section class="mt-7 px-4">
+        <div class="flex justify-between items-center border-b border-dashed border-gray-200 dark:border-dark-soft">
+            <p class="dark:text-white text-xl mb-3"> 
+                Subtotal 
+                    <span class="block"> Descuento </span>
+            </p>
+            <p class="dark:text-white text-xl mb-3"> 
+                $25.00  <span class="block"> $20.00 </span>
+            </p>
+        </div>
+        <div class="flex justify-between items-center border-b border-dashed border-gray-200 dark:border-dark-soft">
+            <p class="dark:text-white text-xl my-3"> Total </p>
+            <p class="dark:text-white text-xl my-3"> $50.00 </p>
+        </div>
+    </section>
+
     <section class="mt-7 px-4">
         <div class="md:flex md:justify-end">
-            <button class="w-full md:w-[20%] flex justify-center items-center gap-x-3 text-xl bg-red-500 text-white py-3 rounded-4xl hover:opacity-75 cursor-pointer font-light">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                </svg> Pagar ahora
+            <button class="w-full md:w-[30%] text-xl bg-red-500 text-white py-3 px-4 rounded-lg hover:opacity-75 cursor-pointer font-bold uppercase">
+                Pagar ahora
             </button>
         </div>
     </section>
+
 </template>
