@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <section class="px-3 mt-40">
+    <section class="px-4 mt-40">
         <div class="my-3 flex justify-between items-center">
             <h2 class="dark:text-white"> Categorías populares </h2>
             <NuxtLink 

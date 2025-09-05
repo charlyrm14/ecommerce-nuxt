@@ -11,7 +11,7 @@
 
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-dark">
-        <main class="flex-1 px-4 py-2">
+        <main class="py-2">
             <slot />
         </main>
         <Footer v-if="!hideFooter"/>
