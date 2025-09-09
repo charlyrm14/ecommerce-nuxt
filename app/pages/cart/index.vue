@@ -1,6 +1,7 @@
 <script setup>
     import CartItem from '~/components/user/cart/CartItem.vue'
     import SectionHeader from '~/components/user/layouts/SectionHeader.vue';
+    import { formatCurrency } from '#imports';
 </script>
 
 <template>
@@ -19,12 +20,12 @@
                     <span class="block"> Descuento </span>
             </p>
             <p class="dark:text-white text-xl mb-3"> 
-                $25.00  <span class="block"> $20.00 </span>
+                {{ formatCurrency("2000") }}  <span class="block"> {{formatCurrency("2000")}} </span>
             </p>
         </div>
         <div class="flex justify-between items-center border-b border-dashed border-gray-200 dark:border-dark-soft">
             <p class="dark:text-white text-xl my-3"> Total </p>
-            <p class="dark:text-white text-xl my-3"> $50.00 </p>
+            <p class="dark:text-white text-xl my-3"> {{ formatCurrency("3000") }} </p>
         </div>
     </section>
 
