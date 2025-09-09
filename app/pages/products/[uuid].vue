@@ -6,6 +6,7 @@
     import type { Product } from '~~/types/Product';
     import { useCounter } from '~/composables/useCounter';
     import type { ApiResponse } from '~~/types/ApiResponse';
+    import { formatCurrency } from '#imports';
 
     const route = useRoute()
     const uuid = route.params.uuid
@@ -86,7 +87,7 @@
                                 :step-duration="0.35"/>
                         </client-only>
                 </div>
-                <span class="text-red-500 text-xl"> ${{ product?.price }} </span>
+                <span class="text-red-500 text-xl"> {{ formatCurrency(product?.price || "---") ?? '---' }} </span>
             </div>
 
             <div class="flex items-center">

@@ -2,6 +2,7 @@
     import Headphones from '~/assets/media/headphones.png'
     import Counter from '~/components/common/Counter.vue';
     import { useCounter } from '~/composables/useCounter';
+    import { formatCurrency } from '#imports';
     
     const { count, increment, decrement } = useCounter(1, 9)
 
@@ -30,7 +31,7 @@
                     </button>
                 </div>
                 <div class="flex justify-between items-center mt-1 md:mt-6">
-                    <p class="text-red-500 text-xl md:text-2xl font-bold"> $6,000.00 </p>
+                    <p class="text-red-500 text-xl md:text-2xl font-bold"> {{formatCurrency("12999")}} </p>
                     <div class="bg-gray-100 dark:bg-dark-light p-1 rounded-4xl">
                         <div class="flex justify-between items-center gap-x-2 md:gap-x-4">
                             <button 

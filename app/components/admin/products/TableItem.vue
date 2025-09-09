@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
     import type { Product } from '~~/types/Product';
+    import { formatCurrency } from '#imports';
 
     defineProps<{
         product: Product
@@ -24,7 +25,7 @@
                 <div>
                     <p class="text-gray-600 text-base"> 
                         {{ product?.name ?? 'Unknown' }}
-                            <span class="text-xs block text-red-500 font-bold"> ${{ product?.price }}</span>
+                            <span class="text-xs block text-red-500 font-bold"> {{ formatCurrency(product?.price || "---") ?? '---' }}</span>
                     </p>                                    
                 </div>
             </div>

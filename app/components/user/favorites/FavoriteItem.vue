@@ -1,5 +1,6 @@
 <script setup>
     import Headphones from '~/assets/media/headphones.png'
+    import { formatCurrency } from '#imports';
 </script>
 
 <template>
@@ -29,7 +30,7 @@
         </div>
         <div class="mt-3 mb-1">
             <div class="flex justify-between items-center py-1 bg-gray-100 dark:bg-dark-soft rounded-4xl">
-                <p class="text-xl text-red-500 font-semibold pl-4"> $6,000.00 </p>
+                <p class="text-xl text-red-500 font-semibold pl-4"> {{ formatCurrency("12999") }} </p>
                 <div class="pr-1">
                     <button 
                         to="/cart"
