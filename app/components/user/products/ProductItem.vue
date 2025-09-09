@@ -1,17 +1,24 @@
-<script setup>
+<script setup lang="ts"> 
     import Headphones from '~/assets/media/headphones.png'
+    import type { Product } from '~~/types/Product';
+    import { formatCurrency } from '#imports';
+    
+    defineProps<{
+        product: Product
+    }>()
+
 </script>
 
 <template>
-    <div class="bg-white dark:bg-dark-extralight border border-gray-200 dark:border-none p-1.5 rounded-lg">
-        <div class="bg-gray-100 dark:bg-dark-soft rounded-lg relative">
+    <div class="bg-white dark:bg-dark-extralight border border-gray-200 dark:border-none p-1.5 rounded-lg w-full">
+        <div class="bg-gray-100 dark:bg-dark-soft rounded-lg relative w-50 md:w-full">
             <NuxtLink 
-                to="/products/13bd3802-2d17-4015-a242-4e8b7be60321">
+                :to="`/products/${product?.uuid}`">
                     <div >
                         <img 
                             :src="Headphones" 
                             alt="Headphones" 
-                            class="w-35 md:w-50 m-auto cursor-pointer"/>
+                            class="w-40 md:w-60 m-auto cursor-pointer"/>
                     </div>
             </NuxtLink>
             <div class="absolute top-1 right-2">
@@ -27,9 +34,9 @@
                 <NuxtLink 
                     to="/products/13bd3802-2d17-4015-a242-4e8b7be60321"
                     class="text-sm dark:text-white font-extralight"> 
-                        Sony WHXM-4000 
+                        {{ product?.name ?? 'Unknown' }}
                 </NuxtLink>
-                <p class="mt-1 text-lg text-red-500 font-bold"> $6,000.00 </p>
+                <p class="mt-1 text-lg text-red-500 font-bold"> {{ formatCurrency(product?.price) ?? '--'}} </p>
             </div>
         </div>
     </div>
