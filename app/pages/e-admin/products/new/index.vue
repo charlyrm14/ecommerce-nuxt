@@ -6,6 +6,7 @@
     import ProductDetails from '~/components/admin/products/ProductDetails.vue';
     import { useProductsStore } from '~~/stores/products';
     import Alert from '~/components/common/Alert.vue';
+import { useFilesStore } from '~~/stores/files';
     
         
     definePageMeta({
@@ -39,7 +40,10 @@
         status: false
     })
 
+    const config = useRuntimeConfig();
+
     const productsStore = useProductsStore()
+    const filesStore = useFilesStore()
 
     const openCreateCategoryModal = () => {
         showCreateCategoryModal.value = true;
@@ -75,7 +79,7 @@
             ...data,
             status: statusProduct.value,
             category_id: categorySelected.value,
-            images: []
+            images: filesStore.files.length > 0 ? filesStore.files.map(file => file?.response?.[0]?.data?.id) : []
         }
 
         try {
