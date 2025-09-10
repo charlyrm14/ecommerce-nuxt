@@ -8,7 +8,8 @@
     import type { ApiResponse } from '~~/types/ApiResponse';
     import { formatCurrency } from '#imports';
     import { useFavoritesStore } from '~~/stores/favorites';
-
+    import ShareProduct from '~/components/user/products/ShareProduct.vue';
+    
     const route = useRoute()
     const uuid = route.params.uuid
     
@@ -22,12 +23,17 @@
 
     const product = ref<Product | null>(data?.value?.data ?? null)
     const stock = ref<number>(product.value?.stock ?? 10)
+    const showShareModal = ref<boolean>(false)
 
     const tabs = ref<number>(1);
             
     const { count, increment, decrement } = useCounter(1, stock)
     
     const favoritesStore = useFavoritesStore()
+
+    const closeShareModal = () => {
+        showShareModal.value = false
+    }
     
 </script>
 
@@ -35,6 +41,7 @@
 
     <section class="px-4 py-6">
         <div class="flex justify-between items-center">
+
             <NuxtLink 
                 to="/"
                 class="bg-white dark:bg-dark-soft border border-gray-200 dark:border-none dark:text-slate-300 p-2 rounded-full cursor-pointer hover:opacity-75">
@@ -42,13 +49,15 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
             </NuxtLink>
+
             <button
+                @click="showShareModal = !showShareModal"
                 class="bg-white dark:bg-dark-soft border border-gray-200 dark:border-none dark:text-slate-300 p-2 rounded-full cursor-pointer hover:opacity-75">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
                     </svg>
             </button>
-            
+
         </div>
     </section>
 
@@ -70,8 +79,6 @@
             </div>
         </div>
     </section>
-
-
 
     <section class="mt-5 px-4">
         <div class="flex justify-between">
@@ -184,6 +191,7 @@
             </div>
         </div>
     </section>
+
     <section class="mt-7 px-4">
         <div class="md:flex md:flex-col md:justify-center items-center">
             <button class="w-full md:w-[40%] rounded-xl bg-black dark:bg-red-500 text-white cursor-pointer hover:opacity-75 py-4 shadow">
@@ -194,4 +202,9 @@
             </button>
         </div>
     </section>
+
+    <ShareProduct
+        v-if="showShareModal"
+        @closeShareModal="closeShareModal"/>
+
 </template>
