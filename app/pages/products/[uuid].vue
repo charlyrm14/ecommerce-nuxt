@@ -6,7 +6,7 @@
     import type { Product } from '~~/types/Product';
     import { useCounter } from '~/composables/useCounter';
     import type { ApiResponse } from '~~/types/ApiResponse';
-    import { formatCurrency } from '#imports';
+    import { formatCurrency, isImage } from '#imports';
     import { useFavoritesStore } from '~~/stores/favorites';
     import ShareProduct from '~/components/user/products/ShareProduct.vue';
     
@@ -26,6 +26,8 @@
     const showShareModal = ref<boolean>(false)
 
     const tabs = ref<number>(1);
+
+    const config = useRuntimeConfig();
             
     const { count, increment, decrement } = useCounter(1, stock)
     
@@ -62,22 +64,39 @@
     </section>
 
     <section class="bg-white dark:bg-dark-light py-4">
-        <div class="flex justify-center my-4">
-            <img 
-                :src="Headphones" 
-                alt="Headphones" 
-                class="w-50 md:w-60 cursor-pointer hover:opacity-75"/>
-        </div>
-        <div class="flex justify-center items-center gap-x-4 my-2">
-            <div
-                v-for="thumbnail in 4"
-                class="bg-gray-200 dark:bg-dark-soft p-1 rounded-lg cursor-pointer hover:opacity-75">
-                    <img 
+            <div class="flex justify-center my-4">
+                <img 
+                    v-if="product?.files?.[0] && isImage(product?.files?.[0]?.mime_type)"
+                    :src="`${config.public.storageBase}/${product?.files?.[0]?.file_path}`" 
+                    :alt="product?.name" 
+                    class="w-50 md:w-60 cursor-pointer hover:opacity-75 drop-shadow-lg"/>
+                <img 
+                    v-else
                     :src="Headphones" 
                     alt="Headphones" 
-                    class="w-15 hover:opacity-75"/>
+                    class="w-50 md:w-60 cursor-pointer hover:opacity-75 drop-shadow-lg"/>
             </div>
-        </div>
+            <div class="flex justify-center items-center gap-x-4 my-2">
+                <div
+                    v-if="product?.files?.[0]?.variants"
+                    v-for="thumbnail in product?.files?.[0]?.variants"
+                    class="bg-gray-200 dark:bg-dark-soft p-1 rounded-lg cursor-pointer hover:opacity-75">
+                        <img 
+                            v-if="isImage(thumbnail?.mime_type)"
+                            :src="`${config.public.storageBase}/${thumbnail?.file_path}`" 
+                            :alt="thumbnail?.file_path" 
+                            class="w-15 hover:opacity-75"/>
+                </div>
+                <div 
+                    v-else
+                    v-for="thumbnail in 4"
+                    class="bg-gray-200 dark:bg-dark-soft p-1 rounded-lg cursor-pointer hover:opacity-75">
+                        <img 
+                            :src="Headphones" 
+                            :alt="`Thumbnail-${thumbnail}`" 
+                            class="w-15 hover:opacity-75"/>
+                </div>
+            </div>
     </section>
 
     <section class="mt-5 px-4">
