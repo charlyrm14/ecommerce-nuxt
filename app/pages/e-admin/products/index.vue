@@ -79,9 +79,21 @@
 
             <div>
                 <Table
-                    v-if="productsStore?.products?.data"
+                    v-if="productsStore?.products?.data?.length > 0"
                     :products="productsStore?.products?.data"
                     @openDeleteProduct="openDeleteProductModal"/>
+
+                <div 
+                    v-else 
+                    class="p-6 flex justify-center">
+                    <NuxtLink 
+                        
+                        to="/e-admin/products/new"
+                        class="text-xl underline text-pink-500 font-light cursor-pointer"> 
+                            Aún no tienes productos, empieza agregando uno
+                    </NuxtLink>
+                </div>
+
             </div>
 
             <div class="p-4 border-t border-gray-200">

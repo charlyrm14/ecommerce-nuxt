@@ -18,7 +18,7 @@ export const useProductsStore = defineStore('products', () => {
 
     const config = useRuntimeConfig();
 
-    const products = ref<Pagination<Product> | null>(null);
+    const products = ref<Pagination<Product> | { data: Product[] } | null>(null);
     const { alert, handleAlert } = useAlert()
 
     const fetchGetProducts = async(page = 1) => {
@@ -43,7 +43,13 @@ export const useProductsStore = defineStore('products', () => {
                 body: data
             })
 
-            console.log(response)
+            if (!products.value) {
+                products.value = {
+                    data: [response.data],
+                }
+            } else {
+                products.value.data.push(response.data)
+            }
 
             products.value?.data.push(response.data)
 
