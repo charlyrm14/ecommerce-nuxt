@@ -47,7 +47,7 @@
     const handlePageChange = (page: number) => {
         categoriesStore.fetchGetCategories(page)
     }
-
+    
 </script>
 
 <template>
@@ -99,9 +99,17 @@
 
             <div>
                 <Table
-                    v-if="categoriesStore.categories?.data"
+                    v-if="categoriesStore.categories?.data?.length > 0"
                     :categories="categoriesStore.categories?.data"
                     @openDeleteModal="openDeleteCategoryModal"/>
+
+                <h2 
+                    v-else
+                    class="p-4 text-xl text-center underline text-pink-500 font-light cursor-pointer"
+                    @click="openCreateCategoryModal()"> 
+                        Aún no tienes categorías, empieza agregando una
+                </h2>
+
             </div>
 
             <div class="p-4 border-t border-gray-200">
