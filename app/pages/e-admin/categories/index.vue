@@ -8,33 +8,17 @@
     import Table from '~/components/admin/categories/Table.vue';
     import { useCategoriesStore } from '~~/stores/categories';
     import type { Category } from '~~/types/Product';
+    import { useModalManager } from '~/composables/useModalManager';
 
     definePageMeta({
         layout: 'admin'
     })
 
-    const showCreateCategoryModal = ref<boolean>(false)
-    const showDeleteCategoryModal = ref<boolean>(false)
     const selectedCategory = ref<Category | null>(null)
     
-    const openCreateCategoryModal = () => {
-        showCreateCategoryModal.value = true;
-    }
-    
-    const closeCreateCategoryModal = () => {
-        showCreateCategoryModal.value = false;
-    }
-
-    const openDeleteCategoryModal = (category: Category) => {
-        selectedCategory.value = category
-        showDeleteCategoryModal.value = true;
-    }
-    
-    const closeDeleteCategoryModal = () => {
-        showDeleteCategoryModal.value = false;
-    }
-
     const categoriesStore = useCategoriesStore();
+
+    const { open, close, isOpen } = useModalManager()
 
     onMounted(async() => {
         try {
@@ -46,6 +30,11 @@
 
     const handlePageChange = (page: number) => {
         categoriesStore.fetchGetCategories(page)
+    }
+
+    const openDelete = (category: Category) => {
+        selectedCategory.value = category
+        open('delete')
     }
     
 </script>
@@ -88,7 +77,7 @@
                     </div>
 
                     <button 
-                        @click="openCreateCategoryModal()"
+                        @click="open('create')"
                         class="bg-blue-500 text-white font-light rounded-lg p-2 md:px-4 md:py-2 cursor-pointer hover:opacity-75 flex items-center gap-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" />
@@ -101,12 +90,11 @@
                 <Table
                     v-if="categoriesStore.categories?.data?.length > 0"
                     :categories="categoriesStore.categories?.data"
-                    @openDeleteModal="openDeleteCategoryModal"/>
+                    @openDeleteModal="openDelete"/>
 
                 <h2 
                     v-else
-                    class="p-4 text-xl text-center underline text-pink-500 font-light cursor-pointer"
-                    @click="openCreateCategoryModal()"> 
+                    class="p-4 text-xl text-center underline text-pink-500 font-light cursor-pointer"> 
                         Aún no tienes categorías, empieza agregando una
                 </h2>
 
@@ -130,12 +118,12 @@
     </section>
 
     <AddCategory
-        v-if="showCreateCategoryModal"
-        @closeCreateCategory="closeCreateCategoryModal()"/>
+        v-if="isOpen('create')"
+        @closeCreateCategory="close"/>
 
     <DeleteCategory
-        v-if="showDeleteCategoryModal"
+        v-if="isOpen('delete')"
         :category="selectedCategory"
-        @closeDeleteCategory="closeDeleteCategoryModal()"/>
+        @closeDeleteCategory="close"/>
 
 </template>
