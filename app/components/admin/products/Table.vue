@@ -25,7 +25,7 @@
                 v-for="product in products"
                 :key="product.id"
                 :product="product"
-                @openDeleteProduct="emit('openDeleteProduct')"/>
+                @openDeleteProduct="emit('openDeleteProduct', product)"/>
         </tbody>
     </table>
 </template>

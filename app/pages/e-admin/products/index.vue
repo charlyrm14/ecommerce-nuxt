@@ -4,6 +4,8 @@
     import PaginationProduct from '~/components/admin/products/PaginationProduct.vue';
     import Table from '~/components/admin/products/Table.vue';
     import { useProductsStore } from '~~/stores/products';
+    import { useModalManager } from '~/composables/useModalManager';
+    import type { Product } from '~~/types/Product';
     
     definePageMeta({
         layout: 'admin'
@@ -11,15 +13,9 @@
 
     const productsStore = useProductsStore()
 
-    const isDeleteProductModalOpen = ref<boolean>(false)
+    const selectedProduct = ref<Product | null>(null)
 
-    const openDeleteProductModal = () => {
-        isDeleteProductModalOpen.value = true
-    }
-
-    const closeDeleteProductModal = () => {
-        isDeleteProductModalOpen.value = false
-    }
+    const { open, close, isOpen } = useModalManager()
 
     onMounted(async() => {
         try {
@@ -34,6 +30,12 @@
     const handlePageChange = (page: number) => {
         productsStore.fetchGetProducts(page)
     }
+
+    const openDelete = (product: Product) => {
+        selectedProduct.value = product
+        open('delete')
+    }
+
 </script>
 
 <template>
@@ -81,7 +83,7 @@
                 <Table
                     v-if="productsStore?.products?.data?.length > 0"
                     :products="productsStore?.products?.data"
-                    @openDeleteProduct="openDeleteProductModal"/>
+                    @openDeleteProduct="openDelete"/>
 
                 <div 
                     v-else 
@@ -116,7 +118,8 @@
     </section>
 
     <DeleteProduct
-        v-if="isDeleteProductModalOpen"
-        @closeDeleteProduct="closeDeleteProductModal()"/>
+        v-if="isOpen('delete')"
+        :product="selectedProduct"
+        @closeDeleteProduct="close"/>
 
 </template>

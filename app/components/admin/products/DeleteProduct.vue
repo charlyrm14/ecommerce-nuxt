@@ -1,4 +1,10 @@
 <script setup lang="ts">
+    import type { Product } from '~~/types/Product';
+
+
+    const props = defineProps<{
+        product: Product | null
+    }>()
 
     const emit = defineEmits(['closeDeleteProduct'])
 
@@ -51,7 +57,7 @@
                 </div>
                 <p class="text-base font-light text-red-500 text-center my-3">
                     ¿Estás seguro de querer eliminar el producto
-                    <span class="font-bold"> TV 4k </span>?
+                    <span class="font-bold"> {{ product?.name ?? 'Unknown' }}</span>?
                 </p>
             </div>
 
