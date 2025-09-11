@@ -19,7 +19,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     const config = useRuntimeConfig();
     const { alert, handleAlert } = useAlert()
 
-    const categories = ref<Pagination<Category> | null>(null);
+    const categories = ref<Pagination<Category> | { data: Category[] } | null>(null);
 
     const fetchGetCategories = async(page = 1) => {
         try {
@@ -43,7 +43,13 @@ export const useCategoriesStore = defineStore('categories', () => {
                 body: data
             })
 
-            categories.value?.data.push(response.data)
+            if (!categories.value) {
+                categories.value = {
+                    data: [response.data],
+                }
+            } else {
+                categories.value.data.push(response.data)
+            }
 
             handleAlert('Éxito', 'Categoría creada con éxito', 'success')
             
