@@ -5,7 +5,7 @@ import type { ApiResponse } from "~~/types/ApiResponse";
 
 export const useProductsStore = defineStore('products', () => {
 
-    type NewProduct = {
+    type NewProductForm = {
         name: string
         description: string
         price: number
@@ -19,6 +19,18 @@ export const useProductsStore = defineStore('products', () => {
     const config = useRuntimeConfig();
 
     const products = ref<Pagination<Product> | { data: Product[] } | null>(null);
+    const error = ref<boolean>(false)
+    const form = reactive<NewProductForm>({
+        name: '',
+        description: '',
+        price: 0,
+        stock: 0,
+        status: 0,
+        category_id: 0,
+        brand_id: 0,
+        images: []
+    })
+
     const { alert, handleAlert } = useAlert()
 
     const fetchGetProducts = async(page = 1) => {
@@ -35,7 +47,7 @@ export const useProductsStore = defineStore('products', () => {
         }
     }
 
-    const createProduct = async(data: NewProduct) => {
+    const createProduct = async(data: NewProductForm) => {
         try {
 
             const response = await $fetch<ApiResponse<Product>>(`${config.public.apiBaseUrl}/products`, {
@@ -66,6 +78,8 @@ export const useProductsStore = defineStore('products', () => {
 
     return {
         products, 
+        error,
+        form,
         alert,
         fetchGetProducts,
         createProduct
