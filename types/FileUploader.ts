@@ -8,33 +8,30 @@ export type FileItem<T = unknown> = {
     response?: T
 }
 
-export type UploadFileResult = Array<{
-    data: {
-        id: number
-        type: string
-        mime_type: string
-        variants: {
-            original: {
-                id: number
-                file_path: string,
-                size?: number,
-                width?: number,
-                height?: number,
-                resolution?: string,
-                original_name: string
-            },
-            thumbnail?: {
-                id: number
-                file_path: string
-                size?: number
-                width?: number
-                height?: number
-                resolution?: string
-                original_name: string
-            }
-        }
-    }
-}>
+export type Variant = {
+    id: number
+    variant: string
+    file_path: string
+    size: string | null
+    width: string | null
+    height: string | null
+    resolution: string | null
+    original_name: string
+    sizeMB?: number
+}
+
+export type UploadFile = {
+    id: number
+    file_path: string
+    mime_type: string
+    variant: string
+    original_name: string
+    variants: Variant[]
+}
+
+export type UploadFileResult = {
+    data: UploadFile[]
+}
 
 export type FileUploaderOptions = {
     accept?: string

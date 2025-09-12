@@ -1,6 +1,5 @@
 import { useFilesStore } from "~~/stores/files"
 import type { 
-    FileItem, 
     FileUploaderOptions, 
     UploadFileResult 
 } from "~~/types/FileUploader"
@@ -59,52 +58,34 @@ export function useFileUploader (options: FileUploaderOptions) {
             const sizeMB = file.size / (1024 * 1024)
             return sizeMB <= (opts.maxSizeMB ?? Infinity)
         })
-
-        filesStore.files.push(
-            ...validFiles.map<FileItem<UploadFileResult>>(file => ({
-                id: crypto.randomUUID(),
-                file,
-                progress: uploadProgress.value,
-                status: uploadStatus.value
-            }))
-        )
         
-        uploadFiles(validFiles)
+        uploadFiles(validFiles.map(file => {
+            const sizeMB = +(file.size / (1024 * 1024)).toFixed(2)
+            return Object.assign(file, { sizeMB })
+        }))
     }
 
     const uploadFiles = async(filesToUpload: File[]) => {
 
-        for (const file of filesToUpload) {
+        try {
             
-            const item = filesStore.files.find(f => f.file === file)
-            if (!item) continue
-
-            try {
-                
-                const formData = new FormData()
-                formData.append('file', file)
-
-                const response = await $fetch<UploadFileResult>(`${config.public.apiBaseUrl}/files`, {
-                    method: 'POST',
-                    body: formData,
-                    onRequestProgress: (event) => {
-                        if (event.total) {
-                            uploadProgress.value = Math.round((event.loaded / event.total) * 100)
-                            uploadStatus.value = 'uploading'
-                        }
-                    }
-                } as any)
-                
-                item.response = response
-                uploadStatus.value = 'success'
-                uploadProgress.value = 100
-
-            } catch (error) {
-
-                console.error(error)
-                uploadStatus.value = 'error'
-                uploadProgress.value = 0
+            const formData = new FormData()
+            
+            for (const file of filesToUpload) {
+                formData.append('files[]', file);
             }
+
+            const response = await $fetch<UploadFileResult>(`${config.public.apiBaseUrl}/files`, {
+                method: 'POST',
+                body: formData
+            } as any)
+
+            filesStore.files.push(response.data)
+
+        } catch (error) {
+
+            console.error(error)
+
         }
     }
 
