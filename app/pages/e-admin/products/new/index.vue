@@ -6,6 +6,7 @@
     import Alert from '~/components/common/Alert.vue';
     import UploadProductFiles from '~/components/admin/products/UploadProductFiles.vue';
     import CreateProductForm from '~/components/admin/products/CreateProductForm.vue';
+    import { useModalManager } from '#imports';
         
     definePageMeta({
         layout: 'admin'
@@ -16,27 +17,18 @@
         status: boolean
     }
 
-    const showCreateCategoryModal = ref<boolean>(false)
-    const statusProduct = ref<number>(0)
     const tabs = ref<number>(1)
-
-    const errors = reactive<Errors>({
-        text: '',
-        status: false
-    })
 
     const productsStore = useProductsStore()
 
-    const openCreateCategoryModal = () => {
-        showCreateCategoryModal.value = true;
+    const { isOpen, close } = useModalManager()
+
+    const closeCategoryModal = () => {
+        close()
     }
     
-    const closeCreateCategoryModal = () => {
-        showCreateCategoryModal.value = false;
-    }
-
     const toggleStatusProduct = () => {
-        statusProduct.value = statusProduct.value === 1 ? 0 : 1
+        productsStore.form.status = productsStore.form.status === 1 ? 0 : 1
     }
 
     const onCategorySelected = (id: number) => {
@@ -71,18 +63,16 @@
                             type="button" 
                             @click="toggleStatusProduct"
                             class="relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 ease-in-out focus:outline-none peer cursor-pointer"
-                            :class="statusProduct  === 1 ? 'bg-blue-500 border-blue-500' : 'bg-gray-200 border-gray-300'">
+                            :class="productsStore.form.status  === 1 ? 'bg-blue-500 border-blue-500' : 'bg-gray-200 border-gray-300'">
                                 <span 
                                     class="inline-block h-6 w-7 transform rounded-full bg-white transition-transform duration-300 ease-in-out peer-checked:translate-x-6"
-                                    :class="statusProduct  === 1 ? 'translate-x-8' : 'translate-x-1'"></span>
+                                    :class="productsStore.form.status  === 1 ? 'translate-x-8' : 'translate-x-1'"></span>
                         </button>
                     </div>
                 </div>
 
                 <ProductDetails
-                    @openCategoryModal="openCreateCategoryModal"
-                    @categorySelected="onCategorySelected"
-                    :error="errors"/>
+                    @categorySelected="onCategorySelected"/>
 
             </aside>
 
@@ -114,7 +104,7 @@
     </section>
 
     <AddCategory
-        v-if="showCreateCategoryModal"
-        @closeCreateCategory="closeCreateCategoryModal()"/>
+        v-if="isOpen('categoryModal')"
+        @closeCreateCategory="closeCategoryModal()"/>
 
 </template>

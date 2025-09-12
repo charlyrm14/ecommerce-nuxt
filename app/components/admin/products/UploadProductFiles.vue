@@ -12,11 +12,11 @@
         </div>
 
         <FileUploader
-                accept="image/*"
-                type="image"
-                :multiple="false"
-                :maxFiles="5"
-                :maxSizeMB="5"
-                :concurrency="1"/>
+            accept="image/*"
+            type="image"
+            :multiple="false"
+            :maxFiles="5"
+            :maxSizeMB="5"
+            :concurrency="1"/>
     </div>
 </template>

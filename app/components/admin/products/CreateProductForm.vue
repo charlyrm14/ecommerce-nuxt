@@ -22,12 +22,26 @@
 
         isSubmitting.value = true
 
-        const formData = {
-            ...data
+        if (productsStore.form.category_id === 0) {
+            productsStore.error = true
+            isSubmitting.value = false
+            return
         }
+
+        productsStore.error = false
 
         try {
 
+            const formData = {
+                ...data,
+                status: productsStore.form.status,
+                category_id: productsStore.form.category_id,
+                images: filesStore.files.length > 0
+                    ? filesStore.files?.[0].flatMap(file => file.variants.map(variant => variant.id))
+                    : []
+            }
+
+            console.log(formData)
             await productsStore.createProduct(formData)
 
         } catch (error) {
@@ -59,16 +73,17 @@
                             type="text"
                             id="name"
                             name="name"
+                            v-model="productsStore.form.name"
                             input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                             message-class="text-red-500 text-sm m-1.5 font-light"
-                            placeholder="Ej: Televisión, playera, cocina"
+                            placeholder="Ej: Sudadera, televisón"
                             validation="required|length:3,100"
                             :validation-messages="{
                                 required: 'Ingresa un nombre',
                                 length: 'El nombre debe contener entre 3 y 100 caracteres'
                             }"
                             :disabled="isSubmitting"/>
-                        <span class="text-xs text-gray-400 mt-1 block">
+                        <span class="text-xs text-gray-400 mt-1 block px-1">
                             Establece el nombre del producto
                         </span>
                     </div>
@@ -89,11 +104,11 @@
                                 </button>
                                 <button 
                                     class="text-gray-400 italic cursor-pointer hover:opacity-75 text-sm"> 
-                                    I 
+                                        I 
                                 </button>
                                 <button 
                                     class="text-gray-400 underline cursor-pointer hover:opacity-75 text-sm"> 
-                                    U 
+                                        U 
                                 </button>
                             </div>
                             <div class="p-0.5 cursor-text">
@@ -101,10 +116,11 @@
                                     type="textarea"
                                     name="description" 
                                     id="description"
+                                    v-model="productsStore.form.description"
                                     placeholder="Escribe aquí..."
                                     input-class="w-full bg-gray-50 text-gray-600 focus:outline-none h-39 p-1.5"
                                     message-class="text-red-500 text-sm my-1.5 font-light"
-                                    validation="required|length:4,500"
+                                    validation="required|length:4,1000"
                                     :validation-messages="{
                                         required: 'Ingresa una descripción',
                                         length: 'La descripción debe tener entre 4 y 500 caracteres'
@@ -124,15 +140,18 @@
                             type="number"
                             name="price"
                             id="price"
+                            v-model="productsStore.form.price"
+                            number="float"
                             input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                             message-class="text-red-500 text-sm m-1.5 font-light"
                             placeholder="Ej: 1299.99"
+                            step="0.01"
                             validation="required"
                             :validation-messages="{
                                 required: 'Ingresa un precio'
                             }"
                             :disabled="isSubmitting"/>
-                        <span class="text-xs text-gray-400 mt-1 block">
+                        <span class="text-xs text-gray-400 mt-1 block px-1">
                             Establece el precio del producto con decimales
                         </span>
                     </div>
@@ -145,6 +164,7 @@
                             type="number"
                             id="stock"
                             name="stock"
+                            v-model="productsStore.form.stock"
                             input-class="w-full bg-gray-50 text-gray-500 border border-gray-200 px-2 py-3 mt-1 focus:outline-none rounded-lg"
                             message-class="text-red-500 text-sm m-1.5 font-light"
                             placeholder="Ej: 5"
@@ -153,7 +173,7 @@
                                 required: 'Ingresa el stock',
                                 min: 'El stock debe tener al menos 1 producto en stock'
                             }"/>
-                        <span class="text-xs text-gray-400 mt-1 block">
+                        <span class="text-xs text-gray-400 mt-1 block px-1">
                             Establece el stock disponible del producto
                         </span>
                     </div>
