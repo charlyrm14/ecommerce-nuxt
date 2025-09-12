@@ -10,6 +10,13 @@
                 Sube tus fotos para destacar sus características y generar más interés entre tus compradores
             </h2>
         </div>
-        <FileUploader/>
+
+        <FileUploader
+                accept="image/*"
+                type="image"
+                :multiple="false"
+                :maxFiles="5"
+                :maxSizeMB="5"
+                :concurrency="1"/>
     </div>
 </template>
