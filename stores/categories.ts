@@ -20,6 +20,7 @@ export const useCategoriesStore = defineStore('categories', () => {
     const { alert, handleAlert } = useAlert()
 
     const categories = ref<Pagination<Category> | { data: Category[] } | null>(null);
+    const query = ref<string>('')
 
     const fetchGetCategories = async(page = 1) => {
         try {
@@ -78,12 +79,25 @@ export const useCategoriesStore = defineStore('categories', () => {
         }
     }
 
+    const filteredCategories = computed(() => {
+
+        const cats = categories?.value?.data || []
+
+        if(!query.value) {
+            return cats.slice(0, 5)
+        }
+
+        return cats.filter(cat => cat.name.toLowerCase().includes(query.value.toLocaleLowerCase())).slice(0, 5)
+    })
+
     return {
         categories,
+        query,
         alert,
         fetchGetCategories,
         createCategory,
-        deleteCategory
+        deleteCategory,
+        filteredCategories
     }
 })
     

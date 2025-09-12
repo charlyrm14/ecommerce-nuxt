@@ -7,7 +7,12 @@
         status: boolean
     }
 
-    const props = defineProps<{
+    type Category = {
+        id: number
+        name: string
+    }
+
+    defineProps<{
         error?: Error
     }>()
 
@@ -15,6 +20,9 @@
         (e: 'openCategoryModal'): void,
         (e: 'categorySelected', id: number): void
     }>()
+
+    const showCategoriesList = ref<boolean>(false)
+    const selectedCategory = ref<Category | null>(null)
 
     const categoriesStore = useCategoriesStore();
 
@@ -26,43 +34,65 @@
         }
     })
 
-    const handleCategoryChange = (event: Event) => {
-        const id = Number((event.target as HTMLSelectElement).value)
-        emit('categorySelected', id)
+    const selectCategory = (category: Category) => {
+        selectedCategory.value = category
+        categoriesStore.query = category.name
     }
 
 </script>
 
 <template>
     <div class="mt-7 rounded-lg border border-gray-200 bg-white p-2">
+
         <div class="py-2 px-4">
             <h2 class="font-bold text-lg"> Detalles del producto </h2>
         </div>
+
         <div class="px-4">
             <div>
-                <label for="category_id" class="text-sm text-blue-500"> Categorías </label>
-                <select 
-                    @change="handleCategoryChange"
-                    name="category_id" 
-                    id="category_id"
-                    class="w-full border border-gray-200 p-2 rounded-lg mt-2 text-gray-600 mb-0.5 focus:outline-none">
-                        <option value="0"> Selecciona una categoría </option>
-                        <option
-                            v-if="categoriesStore.categories?.data"
-                            v-for="category in categoriesStore.categories?.data"
-                            :key="category.id"
-                            :value="category.id"> {{ category?.name }} </option>
-                </select>
+
+                <div class="relative w-72">
+
+                    <label for="category_id" class="text-sm text-blue-500"> Categorías </label>
+                    
+                    <input
+                        v-model="categoriesStore.query"
+                        type="text"
+                        placeholder="Seleccionar categoría"
+                        name="category_id"
+                        id="category_id"
+                        class="w-full border border-gray-200 p-2 rounded-lg mt-2 text-gray-600 mb-0.5 focus:outline-none"
+                        @click="showCategoriesList = !showCategoriesList"/>
+
+                    <ul 
+                        v-if="categoriesStore.query.length >= 0 && showCategoriesList"
+                        class="absolute mt-1 w-full bg-white border border-gray-200  rounded-lg shadow-lg max-h-60 overflow-auto z-10 px-2 py-1">
+                            <li 
+                                v-for="category in categoriesStore.filteredCategories"
+                                :key="category.id"
+                                @click="selectCategory(category)"
+                                class="px-3 py-2 cursor-pointer text-gray-600 hover:bg-blue-500 hover:text-white transition-colors font-light rounded-lg my-1">
+                                    {{ category?.name }}
+                            </li>
+                    </ul>
+
+                    <p  
+                        v-if="selectedCategory"
+                        class="mt-2 text-sm text-gray-500">
+                            Seleccionado: <span class="font-light bg-blue-400 text-white rounded-lg px-2 py-0.5 hover:opacity-75"> {{ selectedCategory.name }} </span>
+                    </p> 
+
+                </div>
+                
                 <span 
                     v-if="error?.status"
                     class="my-1 text-red-500 text-sm block">
                         {{ error?.text }}
                 </span>
-                <span class="text-xs text-gray-400">
-                    Relaciona un producto a una categoría
-                </span>
+
             </div>
         </div>
+
         <div class="px-4 mt-4">
             <button
                 @click="emit('openCategoryModal')"
@@ -72,6 +102,7 @@
                     </svg> Crear nueva categoría
             </button>
         </div>
+
         <div class="px-4 mt-4">
             <div>
                 <label for="brand_id" class="text-sm text-purple-500"> Marca </label>
@@ -88,6 +119,7 @@
                 </span>
             </div>
         </div>
+
         <div class="px-4 mt-4">
             <button
                 class="bg-purple-100 text-purple-500 text-sm px-4 py-2 flex justify-center items-center gap-x-2 w-full rounded-lg hover:opacity-75 cursor-pointer mb-2">
@@ -97,5 +129,6 @@
                     </svg> Crear nueva marca
             </button>
         </div>
+
     </div>
 </template>
