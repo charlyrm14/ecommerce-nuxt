@@ -6,7 +6,7 @@
     import type { Product } from '~~/types/Product';
     import { useCounter } from '~/composables/useCounter';
     import type { ApiResponse } from '~~/types/ApiResponse';
-    import { formatCurrency, isImage } from '#imports';
+    import { formatCurrency, isImage, sectionTabs } from '#imports';
     import { useFavoritesStore } from '~~/stores/favorites';
     import ShareProduct from '~/components/user/products/ShareProduct.vue';
     
@@ -23,20 +23,26 @@
 
     const product = ref<Product | null>(data?.value?.data ?? null)
     const stock = ref<number>(product.value?.stock ?? 10)
-    const showShareModal = ref<boolean>(false)
-
-    const tabs = ref<number>(1);
+    const tabs = ref<number>(1)
+    const activeTab = ref<number>(1)
 
     const config = useRuntimeConfig();
             
     const { count, increment, decrement } = useCounter(1, stock)
+    const { isOpen, open, close } = useModalManager()
     
     const favoritesStore = useFavoritesStore()
-
-    const closeShareModal = () => {
-        showShareModal.value = false
-    }
     
+    const thumbnails = computed(() => {
+        return product?.value?.files
+            .map(file => file.variants.find(v => v.variant === 'thumbnail'))
+            .filter(Boolean)
+    })
+
+    const toggleActiveTab = (id: number) => {
+        activeTab.value = id
+    }
+
 </script>
 
 <template>
@@ -53,7 +59,7 @@
             </NuxtLink>
 
             <button
-                @click="showShareModal = !showShareModal"
+                @click="open('shareModal')"
                 class="bg-white dark:bg-dark-soft border border-gray-200 dark:border-none dark:text-slate-300 p-2 rounded-full cursor-pointer hover:opacity-75">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
@@ -62,9 +68,9 @@
 
         </div>
     </section>
-
+    
     <section class="bg-white dark:bg-dark-light py-4">
-            <div class="flex justify-center my-4">
+            <div class="flex justify-center my-4 dark:bg-d">
                 <img 
                     v-if="product?.files?.[0] && isImage(product?.files?.[0]?.mime_type)"
                     :src="`${config.public.storageBase}/${product?.files?.[0]?.file_path}`" 
@@ -78,23 +84,15 @@
             </div>
             <div class="flex justify-center items-center gap-x-4 my-2">
                 <div
-                    v-if="product?.files?.[0]?.variants"
-                    v-for="thumbnail in product?.files?.[0]?.variants"
+                    v-if="thumbnails && thumbnails?.length > 0"
+                    v-for="thumbnail in thumbnails"
+                    :key="thumbnail?.id"
                     class="bg-gray-200 dark:bg-dark-soft p-1 rounded-lg cursor-pointer hover:opacity-75">
                         <img 
-                            v-if="isImage(thumbnail?.mime_type)"
+                            v-if=" thumbnail?.mime_type && isImage(thumbnail?.mime_type)"
                             :src="`${config.public.storageBase}/${thumbnail?.file_path}`" 
-                            :alt="thumbnail?.file_path" 
-                            class="w-15 hover:opacity-75"/>
-                </div>
-                <div 
-                    v-else
-                    v-for="thumbnail in 4"
-                    class="bg-gray-200 dark:bg-dark-soft p-1 rounded-lg cursor-pointer hover:opacity-75">
-                        <img 
-                            :src="Headphones" 
-                            :alt="`Thumbnail-${thumbnail}`" 
-                            class="w-15 hover:opacity-75"/>
+                            :alt="product?.name! + ' ' + thumbnail?.id" 
+                            class="w-17 md:w-20 hover:opacity-75"/>
                 </div>
             </div>
     </section>
@@ -152,7 +150,7 @@
                     fill="currentColor" 
                     class="size-6">
                         <path 
-                        d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                            d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
                 </svg>
                 <svg
                     v-else
@@ -172,43 +170,24 @@
 
 
     <section class="mt-7 px-4">
+
         <div class="flex gap-x-3">
-            <button 
-                @click="tabs = 1"
-                class="hover:opacity-75 cursor-pointer"
-                :class="tabs === 1 ? 'border-b-2 border-blue-500' : ''">
-                    <h4 class="dark:text-white text-lg font-extralight"> Información </h4>
-            </button>
             <button
-                @click="tabs = 2"
-                class="hover:opacity-75 cursor-pointer"
-                :class="tabs === 2 ? 'border-b-2 border-blue-500' : ''">
-                    <h4 class="dark:text-white text-lg font-extralight"> Opiniones </h4>
+                v-for="tab in sectionTabs()"
+                :key="tab.id"
+                class="hover:opacity-75 cursor-pointer dark:text-white text-lg"
+                :class="activeTab === tab.id ? 'border-b-2 border-blue-500 font-semibold' : 'font-extralight'"
+                @click="toggleActiveTab(tab.id)">
+                    {{  tab.title }}
             </button>
         </div>
-        <div
-            v-if="tabs === 1">
-            <div class="mt-4">
-                <h4 class="text-base font-light dark:text-gray-400"> Descripción </h4>
-                <p class="my-2 text-sm font-extralight dark:text-white">
-                    {{ product?.description }}
-                </p>
-            </div>
+
+        <div>
+            <component
+                :is="sectionTabs().find(tab => tab.id === activeTab)?.key"
+                :description="product?.description"/>
         </div>
-        <div
-            v-if="tabs === 2">
-            <div class="flex justify-start items-start my-4 gap-x-3 border-b border-gray-200 dark:border-dark-soft">
-                <div class="bg-white dark:bg-dark-soft border border-gray-200 dark:border-none dark:text-slate-300 p-2 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="dark:text-gray-400 font-light"> Valentina H. </h4>
-                    <p class="dark:text-white mt-1 mb-3 font-extralight text-sm"> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p>
-                </div>
-            </div>
-        </div>
+        
     </section>
 
     <section class="mt-7 px-4">
@@ -223,7 +202,7 @@
     </section>
 
     <ShareProduct
-        v-if="showShareModal"
-        @closeShareModal="closeShareModal"/>
+        v-if="isOpen('shareModal')"
+        @closeShareModal="close"/>
 
 </template>

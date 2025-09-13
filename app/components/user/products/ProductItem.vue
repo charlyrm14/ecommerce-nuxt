@@ -13,8 +13,8 @@
 </script>
 
 <template>
-    <div class="bg-white dark:bg-dark-extralight border border-gray-200 dark:border-none p-1.5 rounded-lg w-full">
-        <div class="bg-gray-100 dark:bg-dark-soft rounded-lg relative w-50 md:w-full">
+    <div class="bg-white dark:bg-dark-extralight border border-gray-200 dark:border-none p-1.5 rounded-lg w-60 md:w-80 flex-shrink-0">
+        <div class="bg-gray-100 dark:bg-dark-soft rounded-lg relative w-full">
             <NuxtLink 
                 :to="`/products/${product?.uuid}`">
                     <div >
