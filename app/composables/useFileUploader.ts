@@ -6,12 +6,11 @@ import type {
 
 export function useFileUploader (options: FileUploaderOptions) {
 
-    type UploadProgress = 'pending' | 'uploading' | 'success' | 'error'
+    type UploadStatus = 'pending' | 'success' | 'error'
     
     const isDragging = ref<boolean>(false)
     const fileInput = ref<HTMLInputElement | null>(null)
-    const uploadStatus = ref<UploadProgress>('pending')
-    const uploadProgress = ref<number>(0)
+    const uploadStatus = ref<UploadStatus>('pending')
 
     const config = useRuntimeConfig();
     const { message, handleMessage} = useMessageAlert()
@@ -81,11 +80,12 @@ export function useFileUploader (options: FileUploaderOptions) {
             } as any)
 
             filesStore.files.push(response.data)
+            uploadStatus.value = 'success'
 
         } catch (error) {
 
             console.error(error)
-
+            uploadStatus.value = 'error'
         }
     }
 
@@ -97,7 +97,6 @@ export function useFileUploader (options: FileUploaderOptions) {
         isDragging,
         fileInput,
         uploadStatus,
-        uploadProgress,
         config,
         message,
         onDragOver,
