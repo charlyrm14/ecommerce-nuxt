@@ -5,6 +5,11 @@ import type { ApiResponse } from "~~/types/ApiResponse";
 
 export const useProductsStore = defineStore('products', () => {
 
+    type ImageData = {
+        id: number
+        is_main: boolean
+    }
+
     type NewProductForm = {
         name: string
         description: string
@@ -13,7 +18,7 @@ export const useProductsStore = defineStore('products', () => {
         status: number
         category_id: number
         brand_id: number
-        images: Array<number>
+        images: Array<ImageData>
     }
 
     const config = useRuntimeConfig();
