@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useProductsStore } from '~~/stores/products';
-    import { useFilesStore } from '~~/stores/files';
+    import { payloadImages } from '#imports';
 
     type NewProduct = {
         name: string
@@ -16,7 +16,6 @@
     const isSubmitting = ref<boolean>(false)
 
     const productsStore = useProductsStore()
-    const filesStore = useFilesStore()
 
     const handleSubmit = async(data: NewProduct) => {
 
@@ -31,17 +30,14 @@
         productsStore.error = false
 
         try {
-
+            
             const formData = {
                 ...data,
                 status: productsStore.form.status,
                 category_id: productsStore.form.category_id,
-                images: filesStore.files.length > 0
-                    ? filesStore.files?.[0].flatMap(file => file.variants.map(variant => variant.id))
-                    : []
+                images: payloadImages()
             }
 
-            console.log(formData)
             await productsStore.createProduct(formData)
 
         } catch (error) {
