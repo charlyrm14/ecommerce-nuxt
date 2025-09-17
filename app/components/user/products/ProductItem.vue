@@ -1,14 +1,20 @@
 <script setup lang="ts"> 
-    import Headphones from '~/assets/media/headphones.png'
+    import ProductBox from '~/assets/media/product.png'
     import type { Product } from '~~/types/Product';
     import { formatCurrency } from '#imports';
     import { useFavoritesStore } from '~~/stores/favorites'
     
-    defineProps<{
+    const props = defineProps<{
         product: Product
     }>()
 
     const favoritesStore = useFavoritesStore()
+
+    const config = useRuntimeConfig();
+
+    const thumbnail = computed(() => {
+        return props?.product?.files?.filter(file => file.variant === 'thumbnail')
+    })
 
 </script>
 
@@ -19,8 +25,14 @@
                 :to="`/products/${product?.uuid}`">
                     <div >
                         <img 
-                            :src="Headphones" 
-                            alt="Headphones" 
+                            v-if="thumbnail?.[0]"
+                            :src="`${config.public.storageBase}/${thumbnail?.[0]?.file_path}`" 
+                            :alt="`${product?.name}-${thumbnail?.[0]?.id}`"
+                            class="w-40 md:w-60 m-auto cursor-pointer"/>
+                        <img 
+                            v-else
+                            :src="ProductBox" 
+                            :alt="`${product?.name}-${product?.id}`"
                             class="w-40 md:w-60 m-auto cursor-pointer"/>
                     </div>
             </NuxtLink>
