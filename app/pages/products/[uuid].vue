@@ -2,7 +2,7 @@
 
     import BlurText from '~/components/common/BlurText.vue';
     import Counter from '~/components/common/Counter.vue';
-    import Headphones from '~/assets/media/headphones.png'
+    import ProductBox from '~/assets/media/product.png'
     import type { Product } from '~~/types/Product';
     import { useCounter } from '~/composables/useCounter';
     import type { ApiResponse } from '~~/types/ApiResponse';
@@ -33,10 +33,12 @@
     
     const favoritesStore = useFavoritesStore()
     
+    const mainImage = computed(() =>{
+        return product?.value?.files?.filter(prod => prod.variant === 'original' && prod.is_main === 1)
+    })
+
     const thumbnails = computed(() => {
-        return product?.value?.files
-            .map(file => file.variants.find(v => v.variant === 'thumbnail'))
-            .filter(Boolean)
+        return product?.value?.files?.filter(prod => prod.variant === 'thumbnail')
     })
 
     const toggleActiveTab = (id: number) => {
@@ -46,7 +48,6 @@
 </script>
 
 <template>
-
     <section class="px-4 py-6">
         <div class="flex justify-between items-center">
 
@@ -72,14 +73,14 @@
     <section class="bg-white dark:bg-dark-light py-4">
             <div class="flex justify-center my-4 dark:bg-d">
                 <img 
-                    v-if="product?.files?.[0] && isImage(product?.files?.[0]?.mime_type)"
-                    :src="`${config.public.storageBase}/${product?.files?.[0]?.file_path}`" 
-                    :alt="product?.name" 
+                    v-if="mainImage?.[0] && isImage(mainImage?.[0]?.mime_type)"
+                    :src="`${config.public.storageBase}/${mainImage?.[0]?.file_path}`" 
+                    :alt="`${product?.name}-${mainImage?.[0]?.id}`"
                     class="w-50 md:w-60 cursor-pointer hover:opacity-75 drop-shadow-lg"/>
                 <img 
                     v-else
-                    :src="Headphones" 
-                    alt="Headphones" 
+                    :src="ProductBox" 
+                    :alt="`${product?.name}-${product?.id}`"
                     class="w-50 md:w-60 cursor-pointer hover:opacity-75 drop-shadow-lg"/>
             </div>
             <div class="flex justify-center items-center gap-x-4 my-2">
@@ -91,7 +92,7 @@
                         <img 
                             v-if=" thumbnail?.mime_type && isImage(thumbnail?.mime_type)"
                             :src="`${config.public.storageBase}/${thumbnail?.file_path}`" 
-                            :alt="product?.name! + ' ' + thumbnail?.id" 
+                            :alt="`${product?.name}-${thumbnail?.id}`"
                             class="w-17 md:w-20 hover:opacity-75"/>
                 </div>
             </div>
