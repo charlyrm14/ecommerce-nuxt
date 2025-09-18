@@ -23,7 +23,7 @@ Asegúrate de tener instalado:
 Clona el repositorio y entra en la carpeta del proyecto:
 
 ```bash
-git clone https://github.com/usuario/mi-proyecto-nuxt4.git
+git clone https://github.com/charlyrm14/ecommerce-nuxt.git
 cd mi-proyecto-nuxt4
 ```
 
