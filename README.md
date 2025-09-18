@@ -1,75 +1,81 @@
-# Nuxt Minimal Starter
+# 🚀 Proyecto ecommerce Nuxt 4
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Este proyecto está desarrollado con **Nuxt 4**, utilizando **TypeScript** y las siguientes librerías externas:
 
-## Setup
+- [Tailwind CSS ^4.1.11](https://tailwindcss.com/)
+- [Pinia ^0.11.2](https://pinia.vuejs.org/)
+- [FormKit ^1.6.9](https://formkit.com/)
+- [TypeScript](https://www.typescriptlang.org/)
 
-Make sure to install dependencies:
+---
+
+## 📦 Requisitos previos
+
+Asegúrate de tener instalado:
+
+- [Node.js](https://nodejs.org/) >= 18.x
+- [pnpm](https://pnpm.io/) o [npm](https://www.npmjs.com/) o [yarn](https://yarnpkg.com/) (recomendado: **pnpm**)
+
+---
+
+## ⚙️ Instalación
+
+Clona el repositorio y entra en la carpeta del proyecto:
 
 ```bash
-# npm
-npm install
+git clone https://github.com/usuario/mi-proyecto-nuxt4.git
+cd mi-proyecto-nuxt4
+```
 
-# pnpm
+## Instala las dependencias:
+
+```bash
 pnpm install
-
-# yarn
+# o
+npm install
+# o
 yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+## Levantar el proyecto en modo desarrollo
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
 pnpm build
-
-# yarn
+# o
+npm run build
+# o
 yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+## Compilar para producción
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+pnpm start
+# o
+npm run start
+# o
+yarn start
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Para ejecutar el proyecto compilado:
+
+```bash
+pnpm start
+# o
+npm run start
+# o
+yarn start
+```
+
+🧰 Librerías utilizadas
+🔹 Tailwind CSS
+Configurado en tailwind.config.ts.
+
+🔹 Pinia
+Store oficial para Vue 3 / Nuxt.
+
+🔹 FormKit
+Gestor avanzado de formularios.
+
+🔹 TypeScript
+Tipado estricto integrado en Nuxt.
